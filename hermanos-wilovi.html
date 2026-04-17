@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermanos Wilovi</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F0F4FA;--card:#fff;
+  --primary:#1a3a5c;--primary-light:#2a5080;
+  --accent:#e07b20;--accent-light:#f4a84a;
+  --muted:#6b7f99;--border:#d4dde8;
+  --text:#1a2535;--text2:#4a5c72;
+  --green:#2d7a4a;--green-bg:#e6f5ec;
+  --red:#b03030;--red-bg:#fde8e8;
+  --blue:#1a5ca0;--blue-bg:#e8f0fc;
+  --purple:#6b3fa0;--purple-bg:#f0e8fc;
+  --orange:#c45a00;--orange-bg:#fef0e0;
+  --shadow:0 2px 12px rgba(26,58,92,.1);--radius:12px;--radius-sm:8px;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ══ LOGIN ══ */
+#screen-login{position:fixed;inset:0;background:linear-gradient(135deg,#0d2035 0%,#1a3a5c 55%,#2a5080 100%);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.login-box{background:#fff;border-radius:20px;padding:44px 40px;width:380px;box-shadow:0 20px 72px rgba(0,0,0,.4);}
+.login-logo{text-align:center;margin-bottom:6px;}
+.login-logo .logo-title{font-size:26px;font-weight:900;color:var(--primary);letter-spacing:-1px;}
+.login-logo .logo-title span{color:var(--accent);}
+.login-logo .logo-sub{font-size:12px;color:var(--muted);margin-top:3px;letter-spacing:.5px;text-transform:uppercase;}
+.login-divider{border:none;border-top:1px solid var(--border);margin:20px 0;}
+.login-box .form-group{margin-bottom:16px;}
+.login-box label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:5px;}
+.login-box input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;color:var(--text);outline:none;background:#fff;transition:border-color .15s;}
+.login-box input:focus{border-color:var(--accent);}
+.login-err{color:var(--red);font-size:13px;text-align:center;margin-bottom:10px;min-height:18px;}
+.btn-login{width:100%;padding:12px;background:linear-gradient(135deg,var(--accent),var(--primary));color:#fff;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:700;cursor:pointer;margin-top:4px;transition:opacity .15s;}
+.btn-login:hover{opacity:.9;}
+.pass-input-wrap{position:relative;display:flex;align-items:center;}
+.pass-input-wrap input{padding-right:40px;}
+.pass-toggle-btn{position:absolute;right:8px;background:none;border:none;cursor:pointer;font-size:17px;color:var(--muted);line-height:1;padding:2px;}
+.pass-toggle-btn:hover{color:var(--text);}
+
+/* ══ HEADER ══ */
+header{background:linear-gradient(135deg,var(--primary) 0%,#0d2035 100%);color:#fff;padding:0 22px;display:flex;align-items:center;gap:14px;height:60px;box-shadow:0 2px 16px rgba(0,0,0,.3);position:relative;z-index:100;}
+.hdr-logo{font-size:20px;font-weight:900;letter-spacing:-0.5px;white-space:nowrap;}
+.hdr-logo span{color:var(--accent-light);}
+.hdr-spacer{flex:1;}
+.hdr-btn{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s;}
+.hdr-btn:hover{background:rgba(255,255,255,.28);}
+.hdr-btn.active{background:rgba(255,255,255,.3);outline:2px solid rgba(255,255,255,.5);}
+.user-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);border-radius:99px;padding:5px 13px 5px 7px;cursor:pointer;border:none;color:#fff;font-size:12px;transition:background .15s;}
+.user-pill:hover{background:rgba(255,255,255,.25);}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent-light);color:var(--primary);font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.user-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.user-name{font-weight:700;}
+.role-badge-hdr{font-size:10px;opacity:.75;}
+
+/* ══ LAYOUT ══ */
+#app{display:none;flex-direction:column;height:100vh;}
+#app.visible{display:flex;}
+.app-body{flex:1;overflow:hidden;display:flex;}
+.sidebar{width:220px;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+main{flex:1;overflow-y:auto;padding:24px;}
+
+/* ══ SIDEBAR ══ */
+.sidebar-section{padding:8px 8px 4px;}
+.sidebar-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:6px 8px 4px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:all .15s;border:none;background:transparent;width:100%;text-align:left;}
+.nav-item:hover{background:var(--bg);color:var(--text);}
+.nav-item.active{background:linear-gradient(135deg,#e8f0fa,#d4e3f5);color:var(--primary);}
+.nav-icon{font-size:16px;width:20px;text-align:center;}
+.sidebar-user-card{margin:8px;border-radius:var(--radius-sm);background:var(--bg);padding:10px 12px;border:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.suc-avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:14px;}
+.suc-avatar img{width:100%;height:100%;object-fit:cover;}
+.suc-info .suc-name{font-size:13px;font-weight:700;color:var(--text);}
+.suc-info .suc-role{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* ══ BOTONES GENÉRICOS ══ */
+.btn{display:inline-flex;align-items:center;gap:5px;border:none;cursor:pointer;border-radius:var(--radius-sm);font-weight:600;font-size:13px;transition:all .15s;font-family:inherit;}
+.btn-primary{background:var(--accent);color:#fff;padding:8px 14px;}
+.btn-primary:hover{background:var(--orange);}
+.btn-secondary{background:var(--blue-bg);color:var(--blue);padding:8px 14px;}
+.btn-secondary:hover{background:var(--blue);color:#fff;}
+.btn-danger{background:var(--red-bg);color:var(--red);padding:7px 12px;}
+.btn-danger:hover{background:var(--red);color:#fff;}
+.btn-ghost{background:transparent;color:var(--text2);padding:7px 10px;}
+.btn-ghost:hover{background:var(--border);}
+.btn-sm{padding:5px 9px;font-size:12px;}
+.btn-icon{padding:5px 7px;border-radius:6px;}
+
+/* ══ TARJETAS Y SECCIONES ══ */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+.page-header h2{font-size:22px;font-weight:800;color:var(--primary);}
+.page-header p{font-size:13px;color:var(--muted);margin-top:2px;}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-header h3{font-size:15px;font-weight:800;color:var(--primary);}
+.card-body{padding:18px 20px;}
+
+/* ══ DASHBOARD ══ */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:24px;}
+.dash-user-card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);border-top:4px solid var(--primary);cursor:pointer;transition:transform .15s,box-shadow .15s;}
+.dash-user-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,58,92,.15);}
+.duc-avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.duc-avatar img{width:100%;height:100%;object-fit:cover;}
+.duc-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px;}
+.duc-role{font-size:11px;color:var(--muted);margin-bottom:12px;}
+.duc-progress-label{font-size:11px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;}
+.progress-bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--green),#4aaa6a);transition:width .5s;}
+.duc-stats{display:flex;gap:12px;margin-top:10px;}
+.duc-stat{font-size:11px;color:var(--muted);}
+.duc-stat strong{color:var(--text);font-size:13px;}
+
+/* ══ PROYECTOS ══ */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:24px;}
+.project-card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);border-top:5px solid var(--primary);cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;}
+.project-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,58,92,.15);}
+.project-card-actions{position:absolute;top:12px;right:12px;display:flex;gap:4px;opacity:0;transition:opacity .15s;}
+.project-card:hover .project-card-actions{opacity:1;}
+.proj-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px;padding-right:60px;}
+.proj-desc{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.4;}
+.proj-progress-label{font-size:11px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:5px;}
+.proj-stats{display:flex;gap:14px;margin-top:12px;}
+.proj-stat{font-size:11px;color:var(--muted);}
+.proj-stat strong{color:var(--text);font-size:13px;}
+.color-picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.color-opt{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:border-color .15s;}
+.color-opt.selected{border-color:var(--text);}
+
+/* ══ OBJETIVOS - ÁRBOL ══ */
+.obj-section{margin-bottom:8px;}
+.obj-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.user-filter{display:flex;gap:4px;flex-wrap:wrap;}
+.user-filter-btn{padding:5px 12px;border-radius:99px;border:1.5px solid var(--border);background:#fff;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
+.user-filter-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+.obj-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:12px;overflow:hidden;}
+.obj-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none;transition:background .15s;}
+.obj-head:hover{background:var(--bg);}
+.chevron{font-size:11px;transition:transform .2s;color:var(--muted);flex-shrink:0;}
+.chevron.open{transform:rotate(90deg);}
+.obj-title-wrap{flex:1;min-width:0;}
+.obj-title{font-weight:700;font-size:14px;color:var(--text);}
+.obj-owner-badge{font-size:11px;background:var(--blue-bg);color:var(--blue);padding:2px 8px;border-radius:99px;font-weight:600;margin-top:2px;display:inline-block;}
+.obj-proj-badge{font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600;margin-top:2px;margin-left:4px;display:inline-block;}
+.obj-pct{font-size:15px;font-weight:900;color:var(--primary);min-width:44px;text-align:right;flex-shrink:0;}
+.obj-actions{display:flex;gap:4px;flex-shrink:0;}
+.obj-body{border-top:1px solid var(--border);}
+.obj-progress-row{padding:6px 16px 10px;display:flex;align-items:center;gap:10px;}
+.obj-bar{flex:1;height:10px;background:var(--border);border-radius:99px;overflow:hidden;}
+.obj-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--green),#4aaa6a);transition:width .4s;}
+.obj-slider{flex:1;-webkit-appearance:none;height:10px;border-radius:99px;outline:none;cursor:pointer;}
+.obj-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--green);border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.3);cursor:pointer;}
+.obj-slider:disabled{opacity:.35;cursor:not-allowed;}
+.obj-desc{padding:0 16px 12px;font-size:13px;color:var(--text2);line-height:1.5;}
+
+/* ══ SUBTAREAS (árbol recursivo) ══ */
+.subtasks-container{padding:0 0 12px 32px;}
+.subtask-item{border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);margin-bottom:8px;overflow:hidden;}
+.st-head{display:flex;align-items:center;gap:8px;padding:10px 13px;cursor:pointer;user-select:none;transition:background .15s;}
+.st-head:hover{background:#e8eef5;}
+.st-title{font-weight:600;font-size:13px;flex:1;min-width:0;color:var(--text);}
+.st-pct{font-size:13px;font-weight:900;color:var(--primary-light);min-width:38px;text-align:right;flex-shrink:0;}
+.st-actions{display:flex;gap:3px;flex-shrink:0;}
+.st-body{border-top:1px solid var(--border);padding:10px 13px;}
+.st-progress-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.st-slider{flex:1;-webkit-appearance:none;height:9px;border-radius:99px;outline:none;cursor:pointer;}
+.st-slider::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--green);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.st-slider:disabled{opacity:.35;cursor:not-allowed;}
+.st-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:8px;}
+.st-desc-input{width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 9px;font-size:12px;font-family:inherit;resize:vertical;min-height:56px;background:#fff;color:var(--text);outline:none;}
+.st-desc-input:focus{border-color:var(--accent);}
+.nested-subtasks{padding-left:20px;margin-top:8px;}
+.add-subtask-row{padding:8px 13px;border-top:1px dashed var(--border);}
+
+/* ══ ADMIN USUARIOS ══ */
+.users-table{width:100%;border-collapse:collapse;font-size:13px;}
+.users-table th{text-align:left;padding:9px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--border);}
+.users-table td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.users-table tr:hover td{background:var(--bg);}
+.role-pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;}
+.role-Administrador{background:#fde8e8;color:#8b0000;}
+.role-Padre{background:var(--blue-bg);color:var(--blue);}
+.role-Ejecutor{background:var(--green-bg);color:var(--green);}
+.role-Lector{background:var(--orange-bg);color:var(--orange);}
+.access-tags{display:flex;gap:4px;flex-wrap:wrap;}
+.access-tag{background:var(--purple-bg);color:var(--purple);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;}
+.pass-cell{display:flex;align-items:center;gap:6px;}
+.pass-dots{letter-spacing:3px;font-size:14px;color:var(--muted);}
+.pass-text{font-family:monospace;font-size:12px;font-weight:700;color:var(--text);background:var(--bg);padding:2px 6px;border-radius:4px;}
+
+/* ══ FOTO DE PERFIL (modal) ══ */
+.photo-upload-wrap{display:flex;align-items:center;gap:14px;}
+.photo-preview{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-size:26px;font-weight:900;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;border:2px solid var(--border);}
+.photo-preview img{width:100%;height:100%;object-fit:cover;}
+.photo-upload-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius-sm);border:1.5px dashed var(--border);background:var(--bg);color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
+.photo-upload-btn:hover{border-color:var(--accent);color:var(--accent);}
+.photo-remove-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;font-family:inherit;}
+.photo-remove-btn:hover{color:var(--red);}
+
+/* ══ MODALES ══ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal{background:var(--card);border-radius:var(--radius);max-width:500px;width:100%;box-shadow:0 12px 60px rgba(0,0,0,.35);animation:popIn .18s ease;max-height:90vh;display:flex;flex-direction:column;}
+@keyframes popIn{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-header{padding:20px 22px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.modal-header h3{font-size:17px;font-weight:800;color:var(--primary);}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1;padding:2px 6px;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:18px 22px;overflow-y:auto;}
+.modal-footer{padding:0 22px 20px;display:flex;gap:8px;justify-content:flex-end;flex-shrink:0;}
+.form-group{margin-bottom:15px;}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:5px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;color:var(--text);outline:none;background:#fff;transition:border-color .15s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);}
+.form-hint{font-size:11px;color:var(--muted);margin-top:3px;}
+.checkbox-group{display:flex;flex-direction:column;gap:7px;margin-top:5px;}
+.checkbox-label{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--text);cursor:pointer;}
+.checkbox-label input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;}
+
+/* ══ MODAL BIENVENIDA ══ */
+.welcome-modal{max-width:440px!important;text-align:center;}
+.welcome-avatar-wrap{width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto 16px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-size:38px;font-weight:900;border:4px solid var(--primary);box-shadow:0 4px 20px rgba(26,58,92,.25);}
+.welcome-avatar-wrap img{width:100%;height:100%;object-fit:cover;}
+.welcome-name{font-size:22px;font-weight:900;color:var(--primary);margin-bottom:4px;}
+.welcome-role{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.welcome-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.welcome-stat{background:var(--bg);border-radius:var(--radius-sm);padding:14px 10px;border:1px solid var(--border);}
+.welcome-stat-val{font-size:26px;font-weight:900;color:var(--primary);line-height:1;}
+.welcome-stat-val.green{color:var(--green);}
+.welcome-stat-lbl{font-size:11px;color:var(--muted);margin-top:4px;}
+.welcome-msg{background:var(--green-bg);border:1px solid #b2dfc2;border-radius:var(--radius-sm);padding:14px 16px;font-size:14px;color:var(--green);font-weight:600;line-height:1.6;}
+.welcome-progress-row{margin-top:14px;}
+.welcome-progress-bar{height:12px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:6px;}
+.welcome-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--green),#4aaa6a);transition:width 1s ease;}
+
+/* ══ EMPTY STATE ══ */
+.empty{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty .icon{font-size:48px;margin-bottom:12px;}
+.empty p{font-size:14px;line-height:1.6;}
+
+/* ══ TOAST ══ */
+#toast{position:fixed;bottom:24px;right:24px;background:#1a2535;color:#fff;padding:12px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{background:var(--green);}
+#toast.error{background:var(--red);}
+
+/* ══ ADJUNTOS ══ */
+.attach-section{padding:8px 16px 12px;border-top:1px dashed var(--border);}
+.attach-section.att-st{padding:8px 13px 10px;}
+.attach-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:7px;}
+.attach-btns{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.attach-btn{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:99px;border:1.5px solid var(--border);background:#fff;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;}
+.attach-btn:hover{border-color:var(--accent);color:var(--accent);}
+.attach-btn.recording{background:var(--red-bg);border-color:var(--red);color:var(--red);}
+.attach-list{display:flex;flex-direction:column;gap:5px;}
+.attach-item{display:flex;align-items:center;gap:6px;padding:6px 9px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);min-width:0;}
+.attach-item.att-block{flex-direction:column;align-items:flex-start;}
+.attach-item-row{display:flex;align-items:center;gap:6px;width:100%;}
+.attach-icon{font-size:14px;flex-shrink:0;}
+.attach-name{flex:1;font-size:11px;font-weight:600;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.attach-preview{max-width:100%;max-height:140px;border-radius:6px;margin-top:5px;display:block;}
+.attach-audio{width:100%;margin-top:5px;height:32px;}
+.attach-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;flex-shrink:0;padding:1px 4px;line-height:1;}
+.attach-del:hover{color:var(--red);}
+.attach-link{color:var(--blue);text-decoration:none;font-size:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.attach-link:hover{text-decoration:underline;}
+
+/* ══ LOADING ══ */
+#screen-loading{position:fixed;inset:0;background:linear-gradient(135deg,#0d2035 0%,#1a3a5c 55%,#2a5080 100%);display:flex;align-items:center;justify-content:center;z-index:99999;flex-direction:column;gap:14px;color:#fff;}
+.loading-spinner{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:14px;font-weight:600;opacity:.75;letter-spacing:.3px;}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:700px){
+  .sidebar{display:none;}
+  main{padding:16px;}
+  .dash-grid,.projects-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="screen-login">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="logo-title">Hermanos <span>Wilovi</span></div>
+      <div class="logo-sub">Sistema de Objetivos y Metas</div>
+    </div>
+    <hr class="login-divider">
+    <div class="form-group">
+      <label for="login-user">Usuario</label>
+      <input type="text" id="login-user" autocomplete="off" placeholder="Tu nombre de usuario">
+    </div>
+    <div class="form-group">
+      <label for="login-pass">Contraseña</label>
+      <div class="pass-input-wrap">
+        <input type="password" id="login-pass" autocomplete="off" placeholder="••••••••">
+        <button type="button" class="pass-toggle-btn" onclick="toggleLoginPass()" title="Mostrar/ocultar contraseña">&#128065;</button>
+      </div>
+    </div>
+    <div class="login-err" id="login-err"></div>
+    <button class="btn-login" onclick="doLogin()">Ingresar</button>
+  </div>
+</div>
+
+<!-- ══ APP PRINCIPAL ══ -->
+<div id="app">
+  <header>
+    <div class="hdr-logo">Hermanos <span>Wilovi</span></div>
+    <div class="hdr-spacer"></div>
+    <button class="hdr-btn" id="nav-dashboard" onclick="showView('dashboard')">&#127968; Inicio</button>
+    <button class="hdr-btn" id="nav-projects" onclick="showView('projects')">&#128193; Proyectos</button>
+    <button class="hdr-btn" id="nav-objectives" onclick="showView('objectives')">&#127919; Objetivos</button>
+    <button class="hdr-btn" id="nav-admin" onclick="showView('admin')" style="display:none">&#9881; Usuarios</button>
+    <div style="width:1px;height:30px;background:rgba(255,255,255,.2);margin:0 4px;"></div>
+    <button class="user-pill" onclick="doLogout()">
+      <div class="user-avatar" id="hdr-avatar"></div>
+      <div>
+        <div class="user-name" id="hdr-name">—</div>
+        <div class="role-badge-hdr" id="hdr-role">—</div>
+      </div>
+      <span style="font-size:10px;opacity:.6;margin-left:2px;">✕</span>
+    </button>
+  </header>
+
+  <div class="app-body">
+    <div class="sidebar">
+      <div style="height:12px;"></div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navegación</div>
+        <button class="nav-item" id="snav-dashboard" onclick="showView('dashboard')">
+          <span class="nav-icon">&#127968;</span> Inicio
+        </button>
+        <button class="nav-item" id="snav-projects" onclick="showView('projects')">
+          <span class="nav-icon">&#128193;</span> Proyectos
+        </button>
+        <button class="nav-item" id="snav-objectives" onclick="showView('objectives')">
+          <span class="nav-icon">&#127919;</span> Objetivos
+        </button>
+        <button class="nav-item" id="snav-admin" onclick="showView('admin')" style="display:none">
+          <span class="nav-icon">&#9881;</span> Usuarios
+        </button>
+      </div>
+      <div class="sidebar-section" style="margin-top:auto;padding-bottom:12px;">
+        <div class="sidebar-user-card" id="sidebar-user-card">
+          <div class="suc-avatar" id="suc-avatar"></div>
+          <div class="suc-info">
+            <div class="suc-name" id="suc-name">—</div>
+            <div class="suc-role" id="suc-role">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <!-- Vista: Dashboard -->
+      <div id="view-dashboard">
+        <div class="page-header">
+          <div>
+            <h2>&#127968; Panel General</h2>
+            <p id="dash-welcome-msg">Resumen de objetivos</p>
+          </div>
+        </div>
+        <div class="dash-grid" id="dash-users-grid"></div>
+      </div>
+
+      <!-- Vista: Proyectos -->
+      <div id="view-projects" style="display:none">
+        <div class="page-header">
+          <div>
+            <h2>&#128193; Proyectos</h2>
+            <p>Organiza los objetivos dentro de proyectos</p>
+          </div>
+          <button class="btn btn-primary" id="btn-add-proj" onclick="openProjectModal()" style="display:none">&#43; Nuevo Proyecto</button>
+        </div>
+        <div class="projects-grid" id="projects-grid"></div>
+      </div>
+
+      <!-- Vista: Objetivos -->
+      <div id="view-objectives" style="display:none">
+        <div class="page-header">
+          <div>
+            <h2>&#127919; Objetivos y Metas</h2>
+            <p id="obj-view-subtitle">Árbol de objetivos, metas y logros</p>
+          </div>
+          <button class="btn btn-primary" id="btn-add-obj" onclick="openObjModal()">&#43; Nuevo Objetivo</button>
+        </div>
+        <div class="obj-toolbar">
+          <div class="user-filter" id="obj-proj-filter"></div>
+        </div>
+        <div class="obj-toolbar" style="margin-top:-8px;">
+          <div class="user-filter" id="obj-user-filter"></div>
+        </div>
+        <div id="objectives-list"></div>
+      </div>
+
+      <!-- Vista: Admin Usuarios -->
+      <div id="view-admin" style="display:none">
+        <div class="page-header">
+          <div>
+            <h2>&#9881; Gestión de Usuarios</h2>
+            <p>Administra usuarios, roles y permisos de acceso</p>
+          </div>
+          <button class="btn btn-primary" onclick="openUserModal()">&#43; Nuevo Usuario</button>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0;">
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>Foto</th>
+                  <th>Nombre</th>
+                  <th>Usuario</th>
+                  <th>Rol</th>
+                  <th>Contraseña</th>
+                  <th>Acceso a</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="users-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══ MODAL: Bienvenida ══ -->
+<div class="overlay" id="modal-welcome" style="display:none" onclick="closeWelcomeModal(event)">
+  <div class="modal welcome-modal" onclick="event.stopPropagation()">
+    <div class="modal-header" style="justify-content:flex-end;padding-bottom:0;">
+      <button class="modal-close" onclick="closeWelcomeModal()">&#10005;</button>
+    </div>
+    <div class="modal-body" style="padding-top:12px;">
+      <div class="welcome-avatar-wrap" id="welcome-avatar"></div>
+      <div class="welcome-name" id="welcome-name"></div>
+      <div class="welcome-role" id="welcome-role"></div>
+      <div class="welcome-stats" id="welcome-stats"></div>
+      <div class="welcome-msg" id="welcome-msg"></div>
+      <div class="welcome-progress-row">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
+          <span>Progreso general</span>
+          <span id="welcome-pct-label">0%</span>
+        </div>
+        <div class="welcome-progress-bar">
+          <div class="welcome-progress-fill" id="welcome-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="justify-content:center;padding-top:8px;">
+      <button class="btn btn-primary" onclick="closeWelcomeModal()" style="min-width:160px;padding:11px 20px;font-size:15px;">&#128640; ¡Vamos!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Proyecto ══ -->
+<div class="overlay" id="modal-proj" style="display:none" onclick="closeProjectModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modal-proj-title">Nuevo Proyecto</h3>
+      <button class="modal-close" onclick="closeProjectModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="proj-edit-id">
+      <div class="form-group">
+        <label>Nombre del proyecto</label>
+        <input type="text" id="proj-form-title" placeholder="Ej: Escuela 2025">
+      </div>
+      <div class="form-group">
+        <label>Descripción (opcional)</label>
+        <textarea id="proj-form-desc" rows="2" placeholder="¿De qué trata este proyecto?"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Color</label>
+        <div class="color-picker" id="proj-color-picker"></div>
+        <input type="hidden" id="proj-form-color" value="#1a3a5c">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeProjectModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveProject()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Objetivo ══ -->
+<div class="overlay" id="modal-obj" style="display:none" onclick="closeObjModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modal-obj-title">Nuevo Objetivo</h3>
+      <button class="modal-close" onclick="closeObjModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="obj-edit-id">
+      <div class="form-group">
+        <label>Proyecto</label>
+        <select id="obj-form-project">
+          <option value="">Sin proyecto</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Título del objetivo</label>
+        <input type="text" id="obj-form-title" placeholder="Ej: Mejorar en matemáticas">
+      </div>
+      <div class="form-group">
+        <label>Descripción (opcional)</label>
+        <textarea id="obj-form-desc" rows="3" placeholder="Describe el objetivo..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Asignado a</label>
+        <select id="obj-form-owner"></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeObjModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveObj()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Subtarea ══ -->
+<div class="overlay" id="modal-st" style="display:none" onclick="closeStModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modal-st-title">Nueva Subtarea</h3>
+      <button class="modal-close" onclick="closeStModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="st-edit-id">
+      <input type="hidden" id="st-parent-obj-id">
+      <input type="hidden" id="st-parent-st-id">
+      <div class="form-group">
+        <label>Título de la subtarea</label>
+        <input type="text" id="st-form-title" placeholder="Ej: Practicar 30 min diarios">
+      </div>
+      <div class="form-group">
+        <label>Descripción (opcional)</label>
+        <textarea id="st-form-desc" rows="3" placeholder="Detalla esta tarea..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeStModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveSt()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Usuario ══ -->
+<div class="overlay" id="modal-user" style="display:none" onclick="closeUserModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modal-user-title">Nuevo Usuario</h3>
+      <button class="modal-close" onclick="closeUserModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="user-edit-id">
+      <div class="form-group">
+        <label>Foto de perfil</label>
+        <div class="photo-upload-wrap">
+          <div class="photo-preview" id="user-photo-preview"></div>
+          <div>
+            <label class="photo-upload-btn">
+              &#128247; Subir foto
+              <input type="file" id="user-photo-input" accept="image/*" style="display:none" onchange="handleUserPhotoUpload(this)">
+            </label>
+            <br>
+            <button type="button" class="photo-remove-btn" onclick="removeUserPhoto()" style="margin-top:6px;">&#10005; Quitar foto</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" id="user-form-name" placeholder="Ej: Williams David">
+      </div>
+      <div class="form-group">
+        <label>Nombre de usuario</label>
+        <input type="text" id="user-form-username" placeholder="Ej: williams.david" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="text" id="user-form-pass" placeholder="Contraseña" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Rol</label>
+        <select id="user-form-role" onchange="renderAccessCheckboxes()">
+          <option value="Administrador">Administrador</option>
+          <option value="Padre">Padre</option>
+          <option value="Ejecutor">Ejecutor</option>
+          <option value="Lector">Lector</option>
+        </select>
+      </div>
+      <div class="form-group" id="access-group">
+        <label>Acceso a usuarios</label>
+        <div class="form-hint">Selecciona qué usuarios puede ver/gestionar</div>
+        <div class="checkbox-group" id="access-checkboxes"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeUserModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveUser()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Confirmar Eliminación ══ -->
+<div class="overlay" id="modal-confirm" style="display:none" onclick="closeConfirm(event)">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:380px;">
+    <div class="modal-header">
+      <h3>Confirmar eliminación</h3>
+      <button class="modal-close" onclick="closeConfirm()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-msg" style="font-size:14px;color:var(--text2);line-height:1.6;"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn btn-danger" id="confirm-ok-btn">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div id="toast"></div>
+
+<!-- ══ CARGANDO ══ -->
+<div id="screen-loading">
+  <div style="font-size:26px;font-weight:900;letter-spacing:-1px;">Hermanos <span style="color:#f4a84a;">Wilovi</span></div>
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Conectando...</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  ESTADO Y PERSISTENCIA
+// ══════════════════════════════════════════
+const STORAGE_KEY = 'wilovi_state';
+const SB_URL = 'https://ydwxzxdmgtjallvjzegc.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlkd3h6eGRtZ3RqYWxsdmp6ZWdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzODkzMTAsImV4cCI6MjA5MTk2NTMxMH0.Zra-tc2U2elqntM9xp7QqrrxMFkeg5rnnYns_fkybys';
+
+async function sbFetch(path, opts = {}) {
+  const res = await fetch(SB_URL + '/rest/v1/' + path, {
+    ...opts,
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      ...(opts.headers || {})
+    }
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.status === 204 ? null : res.json();
+}
+
+async function syncToSupabase() {
+  await sbFetch('wilovi_state', {
+    method: 'POST',
+    headers: { 'Prefer': 'resolution=merge-duplicates' },
+    body: JSON.stringify({ id: 'main', data: state, updated_at: new Date().toISOString() })
+  });
+}
+
+let state = { users: [], projects: [], objectives: [] };
+let currentUser = null;
+let objFilterUser = 'all';
+let objFilterProject = 'all';
+
+const PROJECT_COLORS = ['#1a3a5c','#2d7a4a','#c45a00','#6b3fa0','#b03030','#1a7090','#8b6914','#555555'];
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+const DEFAULT_STATE = {
+  users: [
+    { id: 'u1', name: 'Williams Contreras', username: 'williams.contreras', password: '123', role: 'Administrador', canAccessUsers: [], photo: null },
+    { id: 'u2', name: 'Williams David',     username: 'williams.david',     password: '123', role: 'Ejecutor',       canAccessUsers: ['u2'], photo: null },
+    { id: 'u3', name: 'Ana Victoria',       username: 'ana.victoria',       password: '123', role: 'Ejecutor',       canAccessUsers: ['u3'], photo: null },
+    { id: 'u4', name: 'WJ',                 username: 'wj',                 password: '123', role: 'Ejecutor',       canAccessUsers: ['u4'], photo: null }
+  ],
+  projects: [],
+  objectives: []
+};
+
+async function loadState() {
+  try {
+    const rows = await sbFetch('wilovi_state?id=eq.main&select=data');
+    if (rows && rows.length > 0) {
+      state = rows[0].data;
+    } else {
+      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      await syncToSupabase();
+    }
+  } catch(e) {
+    console.warn('Supabase no disponible, usando localStorage:', e);
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) state = JSON.parse(raw);
+      else state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    } catch(e2) {
+      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    }
+  }
+  // Migración de campos nuevos en datos existentes
+  state.users.forEach(u => {
+    if (!u.canAccessUsers) u.canAccessUsers = [];
+    if (u.photo === undefined) u.photo = null;
+  });
+  if (!state.projects) state.projects = [];
+  state.objectives.forEach(o => { if (!o.projectId) o.projectId = ''; });
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  syncToSupabase().catch(e => console.warn('Sync Supabase falló:', e));
+}
+
+// ══════════════════════════════════════════
+//  PERMISOS
+// ══════════════════════════════════════════
+function isAdmin()    { return currentUser && currentUser.role === 'Administrador'; }
+function isPadre()    { return currentUser && currentUser.role === 'Padre'; }
+function isEjecutor() { return currentUser && currentUser.role === 'Ejecutor'; }
+function isLector()   { return currentUser && currentUser.role === 'Lector'; }
+
+function canSeeUser(uid) {
+  if (!currentUser) return false;
+  if (isAdmin()) return true;
+  return currentUser.canAccessUsers.includes(uid);
+}
+
+function canEditObj(obj) {
+  if (!currentUser) return false;
+  if (isAdmin()) return true;
+  if (isEjecutor()) return currentUser.canAccessUsers.includes(obj.ownerId);
+  return false;
+}
+
+function canCreateObj() { return isAdmin() || isEjecutor(); }
+
+function getVisibleUsers() {
+  if (isAdmin()) return state.users;
+  return state.users.filter(u => currentUser.canAccessUsers.includes(u.id));
+}
+
+// ══════════════════════════════════════════
+//  AUTENTICACIÓN
+// ══════════════════════════════════════════
+function doLogin() {
+  const username = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pass').value;
+  const user = state.users.find(u => u.username === username && u.password === password);
+  if (!user) {
+    document.getElementById('login-err').textContent = 'Usuario o contraseña incorrectos.';
+    return;
+  }
+  currentUser = user;
+  document.getElementById('screen-login').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  initApp();
+  setTimeout(showWelcomeModal, 300);
+}
+
+document.getElementById('login-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+function doLogout() {
+  currentUser = null;
+  objFilterUser = 'all';
+  objFilterProject = 'all';
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('screen-login').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-err').textContent = '';
+}
+
+// ══════════════════════════════════════════
+//  INICIALIZACIÓN DE APP
+// ══════════════════════════════════════════
+function initApp() {
+  // Header avatar
+  const hdrAv = document.getElementById('hdr-avatar');
+  if (currentUser.photo) {
+    hdrAv.innerHTML = `<img src="${currentUser.photo}" alt="${escHtml(currentUser.name)}">`;
+  } else {
+    hdrAv.textContent = currentUser.name.charAt(0).toUpperCase();
+  }
+  document.getElementById('hdr-name').textContent = currentUser.name;
+  document.getElementById('hdr-role').textContent = currentUser.role;
+
+  // Sidebar avatar
+  const sucAv = document.getElementById('suc-avatar');
+  if (currentUser.photo) {
+    sucAv.innerHTML = `<img src="${currentUser.photo}" alt="${escHtml(currentUser.name)}">`;
+  } else {
+    sucAv.textContent = currentUser.name.charAt(0).toUpperCase();
+  }
+  document.getElementById('suc-name').textContent = currentUser.name;
+  document.getElementById('suc-role').textContent = currentUser.role;
+
+  const adminVisible = isAdmin() ? '' : 'none';
+  document.getElementById('nav-admin').style.display = adminVisible;
+  document.getElementById('snav-admin').style.display = adminVisible;
+
+  showView('dashboard');
+}
+
+// ══════════════════════════════════════════
+//  MODAL DE BIENVENIDA
+// ══════════════════════════════════════════
+function showWelcomeModal() {
+  const u = currentUser;
+  const allObjs = state.objectives;
+  const myObjs = isAdmin() ? allObjs : allObjs.filter(o => o.ownerId === u.id);
+  const myProjects = state.projects;
+  const completed = myObjs.filter(o => calcProgress(o) === 100).length;
+  const avgProgress = myObjs.length
+    ? Math.round(myObjs.reduce((s, o) => s + calcProgress(o), 0) / myObjs.length)
+    : 0;
+
+  // Avatar
+  const avEl = document.getElementById('welcome-avatar');
+  if (u.photo) {
+    avEl.innerHTML = `<img src="${u.photo}" alt="${escHtml(u.name)}">`;
+  } else {
+    avEl.innerHTML = `<span style="font-size:38px;font-weight:900;">${u.name.charAt(0).toUpperCase()}</span>`;
+  }
+
+  document.getElementById('welcome-name').textContent = '¡Hola, ' + u.name + '!';
+  document.getElementById('welcome-role').textContent = u.role + (isAdmin() ? ' · Vista global' : '');
+
+  document.getElementById('welcome-stats').innerHTML = `
+    <div class="welcome-stat">
+      <div class="welcome-stat-val">${myProjects.length}</div>
+      <div class="welcome-stat-lbl">Proyectos</div>
+    </div>
+    <div class="welcome-stat" onclick="showView('objectives');closeWelcomeModal();" style="cursor:pointer;">
+      <div class="welcome-stat-val">${myObjs.length}</div>
+      <div class="welcome-stat-lbl">Objetivos</div>
+    </div>
+    <div class="welcome-stat">
+      <div class="welcome-stat-val green">${avgProgress}%</div>
+      <div class="welcome-stat-lbl">Avance</div>
+    </div>
+  `;
+
+  let msg = '';
+  if (myObjs.length === 0) msg = '🌱 ¡Bienvenido/a! Aún no tienes objetivos. ¡Es el momento perfecto para empezar a trazar tu camino!';
+  else if (avgProgress === 0)  msg = '🚀 ¡Todo listo para comenzar! El primer paso es siempre el más importante. ¡Tú puedes!';
+  else if (avgProgress <= 30) msg = '💪 ¡Ya estás en movimiento! La constancia construye montañas. ¡Sigue adelante cada día!';
+  else if (avgProgress <= 60) msg = '🔥 ¡Vas por muy buen camino! Cada esfuerzo cuenta y se nota. ¡No te detengas!';
+  else if (avgProgress <= 89) msg = '⭐ ¡Excelente progreso! Estás demostrando de lo que eres capaz. ¡La meta está muy cerca!';
+  else if (avgProgress < 100) msg = '🏆 ¡Casi en la cima! Un último empujón y lo lograrás. ¡Eres increíble!';
+  else msg = '🎉 ¡Lo lograste! Has completado todos tus objetivos. ¡Eres un verdadero campeón/a!';
+  document.getElementById('welcome-msg').textContent = msg;
+
+  document.getElementById('welcome-pct-label').textContent = avgProgress + '%';
+  const fill = document.getElementById('welcome-progress-fill');
+  fill.style.width = '0%';
+  setTimeout(() => { fill.style.width = avgProgress + '%'; }, 100);
+
+  document.getElementById('modal-welcome').style.display = 'flex';
+}
+
+function closeWelcomeModal(event) {
+  if (event && event.target !== document.getElementById('modal-welcome')) return;
+  document.getElementById('modal-welcome').style.display = 'none';
+}
+
+// ══════════════════════════════════════════
+//  NAVEGACIÓN
+// ══════════════════════════════════════════
+function showView(view) {
+  ['dashboard','projects','objectives','admin'].forEach(v => {
+    document.getElementById('view-' + v).style.display = v === view ? '' : 'none';
+    const hdrBtn = document.getElementById('nav-' + v);
+    const snavBtn = document.getElementById('snav-' + v);
+    if (hdrBtn) hdrBtn.classList.toggle('active', v === view);
+    if (snavBtn) snavBtn.classList.toggle('active', v === view);
+  });
+
+  if (view === 'dashboard')  renderDashboard();
+  if (view === 'projects')   renderProjects();
+  if (view === 'objectives') renderObjectives();
+  if (view === 'admin')      renderUsers();
+}
+
+// ══════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════
+function renderDashboard() {
+  const visibleUsers = getVisibleUsers();
+  document.getElementById('dash-welcome-msg').textContent =
+    'Hola, ' + currentUser.name + '. Aquí tu resumen de objetivos.';
+
+  const grid = document.getElementById('dash-users-grid');
+  grid.innerHTML = '';
+
+  visibleUsers.forEach(u => {
+    const userObjs = state.objectives.filter(o => o.ownerId === u.id);
+    const totalObjs = userObjs.length;
+    const avgProgress = totalObjs
+      ? Math.round(userObjs.reduce((s, o) => s + calcProgress(o), 0) / totalObjs)
+      : 0;
+    const completed = userObjs.filter(o => calcProgress(o) === 100).length;
+
+    const avatarHtml = u.photo
+      ? `<div class="duc-avatar"><img src="${u.photo}" alt="${escHtml(u.name)}"></div>`
+      : `<div class="duc-avatar">${u.name.charAt(0).toUpperCase()}</div>`;
+
+    const card = document.createElement('div');
+    card.className = 'dash-user-card';
+    card.onclick = () => { objFilterUser = u.id; showView('objectives'); };
+    card.innerHTML = `
+      ${avatarHtml}
+      <div class="duc-name">${escHtml(u.name)}</div>
+      <div class="duc-role">${escHtml(u.role)}</div>
+      <div class="duc-progress-label">
+        <span>Progreso general</span><span>${avgProgress}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${avgProgress}%"></div></div>
+      <div class="duc-stats">
+        <div class="duc-stat"><strong>${totalObjs}</strong><br>Objetivos</div>
+        <div class="duc-stat"><strong>${completed}</strong><br>Completados</div>
+        <div class="duc-stat"><strong>${totalObjs - completed}</strong><br>En progreso</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  if (visibleUsers.length === 0) {
+    grid.innerHTML = '<div class="empty"><div class="icon">&#128101;</div><p>No tienes usuarios asignados aún.</p></div>';
+  }
+}
+
+// ══════════════════════════════════════════
+//  CALCULAR PROGRESO (recursivo)
+// ══════════════════════════════════════════
+function calcProgress(node) {
+  if (!node.subtasks || node.subtasks.length === 0) {
+    return node.progress || 0;
+  }
+  const avg = node.subtasks.reduce((s, st) => s + calcProgress(st), 0) / node.subtasks.length;
+  return Math.round(avg);
+}
+
+// ══════════════════════════════════════════
+//  SLIDER FILL
+// ══════════════════════════════════════════
+function applySliderFill(el) {
+  const min = parseFloat(el.min) || 0;
+  const max = parseFloat(el.max) || 100;
+  const val = parseFloat(el.value) || 0;
+  const pct = ((val - min) / (max - min)) * 100;
+  el.style.background = `linear-gradient(to right,#2d7a4a 0%,#2d7a4a ${pct}%,#d4dde8 ${pct}%,#d4dde8 100%)`;
+}
+
+function initSliderFills() {
+  document.querySelectorAll('.obj-slider,.st-slider').forEach(applySliderFill);
+}
+
+// ══════════════════════════════════════════
+//  PROYECTOS
+// ══════════════════════════════════════════
+function calcProjectProgress(projId) {
+  const objs = state.objectives.filter(o => o.projectId === projId);
+  if (!objs.length) return 0;
+  return Math.round(objs.reduce((s, o) => s + calcProgress(o), 0) / objs.length);
+}
+
+function renderProjects() {
+  document.getElementById('btn-add-proj').style.display = isAdmin() ? '' : 'none';
+  const grid = document.getElementById('projects-grid');
+  grid.innerHTML = '';
+
+  if (state.projects.length === 0) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
+      <div class="icon">&#128193;</div>
+      <p>${isAdmin() ? 'No hay proyectos. ¡Crea el primero!' : 'No hay proyectos creados aún.'}</p>
+    </div>`;
+    return;
+  }
+
+  state.projects.forEach(proj => {
+    const progress = calcProjectProgress(proj.id);
+    const objCount = state.objectives.filter(o => o.projectId === proj.id).length;
+    const color = proj.color || '#1a3a5c';
+
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.style.borderTopColor = color;
+    card.onclick = () => { objFilterProject = proj.id; showView('objectives'); };
+
+    const actionsHtml = isAdmin() ? `
+      <div class="project-card-actions" onclick="event.stopPropagation()">
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="openProjectModal('${proj.id}')">&#9998;</button>
+        <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('proj','${proj.id}')">&#10005;</button>
+      </div>` : '';
+
+    card.innerHTML = `
+      ${actionsHtml}
+      <div class="proj-title">${escHtml(proj.title)}</div>
+      ${proj.description ? `<div class="proj-desc">${escHtml(proj.description)}</div>` : '<div class="proj-desc"></div>'}
+      <div class="proj-progress-label">
+        <span>Progreso</span><span style="font-weight:700;color:${color}">${progress}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${progress}%;background:${color}"></div></div>
+      <div class="proj-stats">
+        <div class="proj-stat"><strong>${objCount}</strong><br>Objetivos</div>
+        <div class="proj-stat"><strong>${state.objectives.filter(o=>o.projectId===proj.id&&calcProgress(o)===100).length}</strong><br>Completados</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function openProjectModal(projId) {
+  // Build color picker
+  const picker = document.getElementById('proj-color-picker');
+  picker.innerHTML = '';
+  PROJECT_COLORS.forEach(c => {
+    const btn = document.createElement('div');
+    btn.className = 'color-opt';
+    btn.style.background = c;
+    btn.title = c;
+    btn.onclick = () => {
+      document.getElementById('proj-form-color').value = c;
+      picker.querySelectorAll('.color-opt').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+    picker.appendChild(btn);
+  });
+
+  if (projId) {
+    const proj = state.projects.find(p => p.id === projId);
+    if (!proj) return;
+    document.getElementById('modal-proj-title').textContent = 'Editar Proyecto';
+    document.getElementById('proj-edit-id').value = proj.id;
+    document.getElementById('proj-form-title').value = proj.title;
+    document.getElementById('proj-form-desc').value = proj.description || '';
+    document.getElementById('proj-form-color').value = proj.color || '#1a3a5c';
+    picker.querySelectorAll('.color-opt').forEach(b => {
+      if (b.title === (proj.color || '#1a3a5c')) b.classList.add('selected');
+    });
+  } else {
+    document.getElementById('modal-proj-title').textContent = 'Nuevo Proyecto';
+    document.getElementById('proj-edit-id').value = '';
+    document.getElementById('proj-form-title').value = '';
+    document.getElementById('proj-form-desc').value = '';
+    document.getElementById('proj-form-color').value = '#1a3a5c';
+    picker.querySelector('.color-opt').classList.add('selected');
+  }
+  document.getElementById('modal-proj').style.display = 'flex';
+  document.getElementById('proj-form-title').focus();
+}
+
+function closeProjectModal(event) {
+  if (event && event.target !== document.getElementById('modal-proj')) return;
+  document.getElementById('modal-proj').style.display = 'none';
+}
+
+function saveProject() {
+  const title = document.getElementById('proj-form-title').value.trim();
+  if (!title) { showToast('El nombre es obligatorio', 'error'); return; }
+  const desc  = document.getElementById('proj-form-desc').value.trim();
+  const color = document.getElementById('proj-form-color').value || '#1a3a5c';
+  const editId = document.getElementById('proj-edit-id').value;
+
+  if (editId) {
+    const proj = state.projects.find(p => p.id === editId);
+    if (proj) { proj.title = title; proj.description = desc; proj.color = color; }
+  } else {
+    state.projects.push({ id: uid(), title, description: desc, color, createdAt: Date.now() });
+  }
+  saveState();
+  document.getElementById('modal-proj').style.display = 'none';
+  renderProjects();
+  showToast(editId ? 'Proyecto actualizado' : 'Proyecto creado', 'success');
+}
+
+// ══════════════════════════════════════════
+//  VISTA: OBJETIVOS
+// ══════════════════════════════════════════
+function renderObjectives() {
+  const visibleUsers = getVisibleUsers();
+
+  // Filtro de proyectos
+  const projFilter = document.getElementById('obj-proj-filter');
+  projFilter.innerHTML = '';
+  if (state.projects.length > 0) {
+    const allBtn = document.createElement('button');
+    allBtn.className = 'user-filter-btn' + (objFilterProject === 'all' ? ' active' : '');
+    allBtn.textContent = '📁 Todos los proyectos';
+    allBtn.onclick = () => { objFilterProject = 'all'; renderObjectives(); };
+    projFilter.appendChild(allBtn);
+
+    state.projects.forEach(proj => {
+      const btn = document.createElement('button');
+      btn.className = 'user-filter-btn' + (objFilterProject === proj.id ? ' active' : '');
+      btn.style.cssText = objFilterProject === proj.id
+        ? `background:${proj.color};border-color:${proj.color};color:#fff;`
+        : `border-color:${proj.color};color:${proj.color};`;
+      btn.textContent = proj.title;
+      btn.onclick = () => { objFilterProject = proj.id; renderObjectives(); };
+      projFilter.appendChild(btn);
+    });
+  }
+
+  // Subtítulo del proyecto seleccionado
+  if (objFilterProject !== 'all') {
+    const proj = state.projects.find(p => p.id === objFilterProject);
+    document.getElementById('obj-view-subtitle').textContent = proj
+      ? `Proyecto: ${proj.title} · ${calcProjectProgress(proj.id)}% completado`
+      : 'Árbol de objetivos, metas y logros';
+  } else {
+    document.getElementById('obj-view-subtitle').textContent = 'Árbol de objetivos, metas y logros';
+  }
+
+  // Filtro de usuarios
+  const filterDiv = document.getElementById('obj-user-filter');
+  filterDiv.innerHTML = '';
+  if (visibleUsers.length > 1) {
+    const allBtn = document.createElement('button');
+    allBtn.className = 'user-filter-btn' + (objFilterUser === 'all' ? ' active' : '');
+    allBtn.textContent = 'Todos';
+    allBtn.onclick = () => { objFilterUser = 'all'; renderObjectives(); };
+    filterDiv.appendChild(allBtn);
+  }
+  visibleUsers.forEach(u => {
+    const btn = document.createElement('button');
+    btn.className = 'user-filter-btn' + (objFilterUser === u.id ? ' active' : '');
+    btn.textContent = u.name;
+    btn.onclick = () => { objFilterUser = u.id; renderObjectives(); };
+    filterDiv.appendChild(btn);
+  });
+
+  document.getElementById('btn-add-obj').style.display = canCreateObj() ? '' : 'none';
+
+  // Lista de objetivos
+  const list = document.getElementById('objectives-list');
+  list.innerHTML = '';
+
+  const filteredUsers = objFilterUser === 'all' ? visibleUsers : visibleUsers.filter(u => u.id === objFilterUser);
+  let totalRendered = 0;
+
+  filteredUsers.forEach(u => {
+    let userObjs = state.objectives.filter(o => o.ownerId === u.id);
+    if (objFilterProject !== 'all') {
+      userObjs = userObjs.filter(o => o.projectId === objFilterProject);
+    }
+    userObjs.forEach(obj => {
+      list.appendChild(renderObjCard(obj));
+      totalRendered++;
+    });
+  });
+
+  if (totalRendered === 0) {
+    list.innerHTML = `<div class="empty"><div class="icon">&#127919;</div>
+      <p>${canCreateObj() ? 'No hay objetivos aún. ¡Crea el primero!' : 'No hay objetivos para mostrar.'}</p></div>`;
+  }
+
+  initSliderFills();
+}
+
+function renderObjCard(obj) {
+  const progress = calcProgress(obj);
+  const canEdit = canEditObj(obj);
+  const owner = state.users.find(u => u.id === obj.ownerId);
+  const ownerName = owner ? owner.name : '?';
+  const isExpanded = obj._expanded !== false;
+  const proj = state.projects.find(p => p.id === obj.projectId);
+
+  const card = document.createElement('div');
+  card.className = 'obj-card';
+  card.id = 'obj-' + obj.id;
+
+  const bodyId = 'obj-body-' + obj.id;
+  const projBadge = proj
+    ? `<span class="obj-proj-badge" style="background:${proj.color}22;color:${proj.color};">&#128193; ${escHtml(proj.title)}</span>`
+    : '';
+
+  card.innerHTML = `
+    <div class="obj-head" onclick="toggleObj('${obj.id}')">
+      <span class="chevron ${isExpanded ? 'open' : ''}" id="chv-${obj.id}">&#9654;</span>
+      <div class="obj-title-wrap">
+        <div class="obj-title">${escHtml(obj.title)}</div>
+        <span class="obj-owner-badge">&#128100; ${escHtml(ownerName)}</span>${projBadge}
+      </div>
+      <span class="obj-pct">${progress}%</span>
+      ${canEdit ? `
+      <div class="obj-actions" onclick="event.stopPropagation()">
+        <button class="btn btn-ghost btn-sm btn-icon" title="Editar" onclick="openObjModal('${obj.id}')">&#9998;</button>
+        <button class="btn btn-danger btn-sm btn-icon" title="Eliminar" onclick="confirmDelete('obj','${obj.id}')">&#10005;</button>
+      </div>` : ''}
+    </div>
+    <div class="obj-body" id="${bodyId}" style="display:${isExpanded ? '' : 'none'}">
+      <div class="obj-progress-row">
+        ${canEdit && (!obj.subtasks || obj.subtasks.length === 0)
+          ? `<input type="range" class="obj-slider" min="0" max="100" value="${progress}"
+               oninput="updateObjProgress('${obj.id}', this.value); applySliderFill(this);">`
+          : `<div class="obj-bar"><div class="obj-bar-fill" style="width:${progress}%"></div></div>`
+        }
+        <span style="font-size:12px;font-weight:700;color:var(--muted);min-width:38px;text-align:right;" id="obj-pct-row-${obj.id}">${progress}%</span>
+      </div>
+      ${obj.description ? `<div class="obj-desc">${escHtml(obj.description)}</div>` : ''}
+      ${renderAttachmentSection(obj, canEdit, false)}
+      <div class="subtasks-container" id="sts-${obj.id}"></div>
+      ${canEdit ? `
+      <div style="padding:0 16px 14px;">
+        <button class="btn btn-secondary btn-sm" onclick="openStModal('${obj.id}', null)">
+          &#43; Agregar subtarea
+        </button>
+      </div>` : ''}
+    </div>
+  `;
+
+  const stsContainer = card.querySelector('#sts-' + obj.id);
+  if (obj.subtasks && obj.subtasks.length > 0) {
+    obj.subtasks.forEach(st => {
+      stsContainer.appendChild(renderSubtask(st, obj.id, null, canEdit, 0));
+    });
+  }
+
+  return card;
+}
+
+function renderSubtask(st, objId, parentStId, canEdit, depth) {
+  const progress = calcProgress(st);
+  const isExpanded = st._expanded !== false;
+  const maxDepth = 2;
+
+  const div = document.createElement('div');
+  div.className = 'subtask-item';
+  div.id = 'st-' + st.id;
+
+  const bodyId = 'st-body-' + st.id;
+  const hasSubs = st.subtasks && st.subtasks.length > 0;
+
+  div.innerHTML = `
+    <div class="st-head" onclick="toggleSt('${st.id}')">
+      ${hasSubs ? `<span class="chevron ${isExpanded ? 'open' : ''}" id="chv-st-${st.id}">&#9654;</span>`
+                : `<span style="width:14px;display:inline-block;"></span>`}
+      <span class="st-title">${escHtml(st.title)}</span>
+      <span class="st-pct">${progress}%</span>
+      ${canEdit ? `
+      <div class="st-actions" onclick="event.stopPropagation()">
+        <button class="btn btn-ghost btn-sm btn-icon" title="Editar" onclick="openStModal('${objId}','${parentStId || ''}','${st.id}')">&#9998;</button>
+        <button class="btn btn-danger btn-sm btn-icon" title="Eliminar" onclick="confirmDelete('st','${st.id}','${objId}')">&#10005;</button>
+      </div>` : ''}
+    </div>
+    <div class="st-body" id="${bodyId}" style="display:${isExpanded ? '' : 'none'}">
+      ${st.description ? `<div class="st-desc">${escHtml(st.description)}</div>` : ''}
+      <div class="st-progress-row">
+        ${canEdit && !hasSubs
+          ? `<input type="range" class="st-slider" min="0" max="100" value="${progress}"
+               oninput="updateStProgress('${objId}','${st.id}', this.value); applySliderFill(this);">`
+          : `<div class="obj-bar" style="flex:1"><div class="obj-bar-fill" style="width:${progress}%"></div></div>`
+        }
+        <span style="font-size:11px;font-weight:700;color:var(--muted);min-width:34px;text-align:right;">${progress}%</span>
+      </div>
+      ${!hasSubs ? renderAttachmentSection(st, canEdit, true) : ''}
+      <div class="nested-subtasks" id="nst-${st.id}"></div>
+      ${canEdit && depth < maxDepth ? `
+      <button class="btn btn-ghost btn-sm" style="font-size:11px;" onclick="openStModal('${objId}','${st.id}')">
+        &#43; Sub-tarea
+      </button>` : ''}
+    </div>
+  `;
+
+  if (hasSubs) {
+    const nestedContainer = div.querySelector('#nst-' + st.id);
+    st.subtasks.forEach(child => {
+      nestedContainer.appendChild(renderSubtask(child, objId, st.id, canEdit, depth + 1));
+    });
+  }
+
+  return div;
+}
+
+function toggleObj(objId) {
+  const obj = state.objectives.find(o => o.id === objId);
+  if (!obj) return;
+  obj._expanded = obj._expanded === false ? true : false;
+  const body = document.getElementById('obj-body-' + objId);
+  const chv  = document.getElementById('chv-' + objId);
+  if (body) body.style.display = obj._expanded === false ? 'none' : '';
+  if (chv)  chv.classList.toggle('open', obj._expanded !== false);
+}
+
+function toggleSt(stId) {
+  const st = findSubtask(state.objectives, stId);
+  if (!st) return;
+  st._expanded = st._expanded === false ? true : false;
+  const body = document.getElementById('st-body-' + stId);
+  const chv  = document.getElementById('chv-st-' + stId);
+  if (body) body.style.display = st._expanded === false ? 'none' : '';
+  if (chv)  chv.classList.toggle('open', st._expanded !== false);
+}
+
+// ══════════════════════════════════════════
+//  PROGRESO
+// ══════════════════════════════════════════
+function updateObjProgress(objId, val) {
+  const obj = state.objectives.find(o => o.id === objId);
+  if (!obj) return;
+  obj.progress = parseInt(val);
+  saveState();
+  const card = document.getElementById('obj-' + objId);
+  if (card) {
+    card.querySelector('.obj-pct').textContent = val + '%';
+    const rowSpan = document.getElementById('obj-pct-row-' + objId);
+    if (rowSpan) rowSpan.textContent = val + '%';
+  }
+  refreshDashboardIfVisible();
+}
+
+function updateStProgress(objId, stId, val) {
+  const st = findSubtask(state.objectives, stId);
+  if (!st) return;
+  st.progress = parseInt(val);
+  saveState();
+  renderObjectives();
+  refreshDashboardIfVisible();
+}
+
+function refreshDashboardIfVisible() {
+  if (document.getElementById('view-dashboard').style.display !== 'none') {
+    renderDashboard();
+  }
+}
+
+// ══════════════════════════════════════════
+//  CRUD OBJETIVOS
+// ══════════════════════════════════════════
+function openObjModal(objId) {
+  // Populate project selector
+  const projSel = document.getElementById('obj-form-project');
+  projSel.innerHTML = '<option value="">Sin proyecto</option>';
+  state.projects.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.title;
+    projSel.appendChild(opt);
+  });
+
+  // Populate owner selector
+  const select = document.getElementById('obj-form-owner');
+  select.innerHTML = '';
+  getVisibleUsers().forEach(u => {
+    const opt = document.createElement('option');
+    opt.value = u.id;
+    opt.textContent = u.name;
+    select.appendChild(opt);
+  });
+
+  if (objId) {
+    const obj = state.objectives.find(o => o.id === objId);
+    if (!obj) return;
+    document.getElementById('modal-obj-title').textContent = 'Editar Objetivo';
+    document.getElementById('obj-edit-id').value = obj.id;
+    document.getElementById('obj-form-title').value = obj.title;
+    document.getElementById('obj-form-desc').value = obj.description || '';
+    select.value = obj.ownerId;
+    projSel.value = obj.projectId || '';
+  } else {
+    document.getElementById('modal-obj-title').textContent = 'Nuevo Objetivo';
+    document.getElementById('obj-edit-id').value = '';
+    document.getElementById('obj-form-title').value = '';
+    document.getElementById('obj-form-desc').value = '';
+    if (objFilterUser !== 'all') select.value = objFilterUser;
+    if (objFilterProject !== 'all') projSel.value = objFilterProject;
+  }
+  document.getElementById('modal-obj').style.display = 'flex';
+  document.getElementById('obj-form-title').focus();
+}
+
+function closeObjModal(event) {
+  if (event && event.target !== document.getElementById('modal-obj')) return;
+  document.getElementById('modal-obj').style.display = 'none';
+}
+
+function saveObj() {
+  const title = document.getElementById('obj-form-title').value.trim();
+  if (!title) { showToast('El título es obligatorio', 'error'); return; }
+  const ownerId   = document.getElementById('obj-form-owner').value;
+  const desc      = document.getElementById('obj-form-desc').value.trim();
+  const projectId = document.getElementById('obj-form-project').value;
+  const editId    = document.getElementById('obj-edit-id').value;
+
+  if (editId) {
+    const obj = state.objectives.find(o => o.id === editId);
+    if (obj) { obj.title = title; obj.description = desc; obj.ownerId = ownerId; obj.projectId = projectId; }
+  } else {
+    state.objectives.push({ id: uid(), title, description: desc, ownerId, projectId, progress: 0, subtasks: [] });
+  }
+  saveState();
+  document.getElementById('modal-obj').style.display = 'none';
+  renderObjectives();
+  showToast(editId ? 'Objetivo actualizado' : 'Objetivo creado', 'success');
+}
+
+// ══════════════════════════════════════════
+//  CRUD SUBTAREAS
+// ══════════════════════════════════════════
+function openStModal(objId, parentStId, editStId) {
+  document.getElementById('st-parent-obj-id').value = objId || '';
+  document.getElementById('st-parent-st-id').value = parentStId || '';
+
+  if (editStId) {
+    const st = findSubtask(state.objectives, editStId);
+    if (!st) return;
+    document.getElementById('modal-st-title').textContent = 'Editar Subtarea';
+    document.getElementById('st-edit-id').value = editStId;
+    document.getElementById('st-form-title').value = st.title;
+    document.getElementById('st-form-desc').value = st.description || '';
+  } else {
+    document.getElementById('modal-st-title').textContent = 'Nueva Subtarea';
+    document.getElementById('st-edit-id').value = '';
+    document.getElementById('st-form-title').value = '';
+    document.getElementById('st-form-desc').value = '';
+  }
+  document.getElementById('modal-st').style.display = 'flex';
+  document.getElementById('st-form-title').focus();
+}
+
+function closeStModal(event) {
+  if (event && event.target !== document.getElementById('modal-st')) return;
+  document.getElementById('modal-st').style.display = 'none';
+}
+
+function saveSt() {
+  const title = document.getElementById('st-form-title').value.trim();
+  if (!title) { showToast('El título es obligatorio', 'error'); return; }
+  const desc  = document.getElementById('st-form-desc').value.trim();
+  const objId = document.getElementById('st-parent-obj-id').value;
+  const parentStId = document.getElementById('st-parent-st-id').value;
+  const editStId = document.getElementById('st-edit-id').value;
+
+  if (editStId) {
+    const st = findSubtask(state.objectives, editStId);
+    if (st) { st.title = title; st.description = desc; }
+  } else {
+    const newSt = { id: uid(), title, description: desc, progress: 0, subtasks: [] };
+    if (parentStId) {
+      const parent = findSubtask(state.objectives, parentStId);
+      if (parent) { if (!parent.subtasks) parent.subtasks = []; parent.subtasks.push(newSt); }
+    } else {
+      const obj = state.objectives.find(o => o.id === objId);
+      if (obj) { if (!obj.subtasks) obj.subtasks = []; obj.subtasks.push(newSt); }
+    }
+  }
+  saveState();
+  document.getElementById('modal-st').style.display = 'none';
+  renderObjectives();
+  showToast(editStId ? 'Subtarea actualizada' : 'Subtarea creada', 'success');
+}
+
+// ══════════════════════════════════════════
+//  ELIMINAR (con confirmación)
+// ══════════════════════════════════════════
+let pendingDelete = null;
+
+function confirmDelete(type, id, objId) {
+  let msg = '';
+  if (type === 'obj') {
+    const obj = state.objectives.find(o => o.id === id);
+    msg = `¿Eliminar el objetivo "<strong>${escHtml(obj ? obj.title : id)}</strong>"? Se eliminarán también todas sus subtareas.`;
+  } else if (type === 'st') {
+    const st = findSubtask(state.objectives, id);
+    msg = `¿Eliminar la subtarea "<strong>${escHtml(st ? st.title : id)}</strong>"?`;
+  } else if (type === 'user') {
+    const u = state.users.find(u => u.id === id);
+    msg = `¿Eliminar el usuario "<strong>${escHtml(u ? u.name : id)}</strong>"? Sus objetivos quedarán huérfanos.`;
+  } else if (type === 'proj') {
+    const proj = state.projects.find(p => p.id === id);
+    msg = `¿Eliminar el proyecto "<strong>${escHtml(proj ? proj.title : id)}</strong>"? Los objetivos vinculados quedarán sin proyecto.`;
+  }
+  document.getElementById('confirm-msg').innerHTML = msg;
+  pendingDelete = { type, id, objId };
+  document.getElementById('modal-confirm').style.display = 'flex';
+  document.getElementById('confirm-ok-btn').onclick = execDelete;
+}
+
+function execDelete() {
+  if (!pendingDelete) return;
+  const { type, id, objId } = pendingDelete;
+  if (type === 'obj') {
+    state.objectives = state.objectives.filter(o => o.id !== id);
+  } else if (type === 'st') {
+    removeSubtask(state.objectives, id);
+  } else if (type === 'user') {
+    state.users = state.users.filter(u => u.id !== id);
+  } else if (type === 'proj') {
+    state.objectives.forEach(o => { if (o.projectId === id) o.projectId = ''; });
+    state.projects = state.projects.filter(p => p.id !== id);
+  }
+  saveState();
+  closeConfirm();
+  if (type === 'user') renderUsers();
+  else if (type === 'proj') renderProjects();
+  else renderObjectives();
+  showToast('Eliminado correctamente', 'success');
+}
+
+function closeConfirm(event) {
+  if (event && event.target !== document.getElementById('modal-confirm')) return;
+  document.getElementById('modal-confirm').style.display = 'none';
+  pendingDelete = null;
+}
+
+// ══════════════════════════════════════════
+//  ADMIN: USUARIOS
+// ══════════════════════════════════════════
+function renderUsers() {
+  const tbody = document.getElementById('users-tbody');
+  tbody.innerHTML = '';
+
+  state.users.forEach(u => {
+    const accessNames = (u.canAccessUsers || [])
+      .map(uid => { const fu = state.users.find(x => x.id === uid); return fu ? fu.name : null; })
+      .filter(Boolean);
+
+    const avatarHtml = u.photo
+      ? `<img src="${u.photo}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--border);">`
+      : `<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;">${u.name.charAt(0).toUpperCase()}</div>`;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${avatarHtml}</td>
+      <td style="font-weight:700;">${escHtml(u.name)}</td>
+      <td style="font-family:monospace;font-size:12px;">${escHtml(u.username)}</td>
+      <td><span class="role-pill role-${u.role}">${u.role}</span></td>
+      <td>
+        <div class="pass-cell">
+          <span class="pass-dots" id="pd-${u.id}">••••••</span>
+          <span class="pass-text" id="pt-${u.id}" style="display:none">${escHtml(u.password)}</span>
+          <button class="btn btn-ghost btn-sm" onclick="togglePass('${u.id}')">&#128065;</button>
+        </div>
+      </td>
+      <td>
+        ${u.role === 'Administrador' ? '<span style="font-size:12px;color:var(--muted)">Todos</span>' :
+          accessNames.length
+            ? `<div class="access-tags">${accessNames.map(n => `<span class="access-tag">${escHtml(n)}</span>`).join('')}</div>`
+            : '<span style="font-size:12px;color:var(--muted)">Ninguno</span>'
+        }
+      </td>
+      <td>
+        <div style="display:flex;gap:5px;">
+          <button class="btn btn-secondary btn-sm" onclick="openUserModal('${u.id}')">&#9998; Editar</button>
+          ${u.id !== currentUser.id
+            ? `<button class="btn btn-danger btn-sm" onclick="confirmDelete('user','${u.id}')">&#10005;</button>`
+            : ''}
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function togglePass(uid) {
+  const dots = document.getElementById('pd-' + uid);
+  const text = document.getElementById('pt-' + uid);
+  if (!dots || !text) return;
+  const isHidden = dots.style.display !== 'none';
+  dots.style.display = isHidden ? 'none' : '';
+  text.style.display = isHidden ? '' : 'none';
+}
+
+let pendingUserPhoto = undefined; // undefined = no change, null = remove, string = new photo
+
+function openUserModal(userId) {
+  pendingUserPhoto = undefined;
+
+  renderAccessCheckboxes(userId);
+
+  if (userId) {
+    const u = state.users.find(x => x.id === userId);
+    if (!u) return;
+    document.getElementById('modal-user-title').textContent = 'Editar Usuario';
+    document.getElementById('user-edit-id').value = u.id;
+    document.getElementById('user-form-name').value = u.name;
+    document.getElementById('user-form-username').value = u.username;
+    document.getElementById('user-form-pass').value = u.password;
+    document.getElementById('user-form-role').value = u.role;
+    renderUserPhotoPreview(u.photo, u.name);
+    renderAccessCheckboxes(userId);
+  } else {
+    document.getElementById('modal-user-title').textContent = 'Nuevo Usuario';
+    document.getElementById('user-edit-id').value = '';
+    document.getElementById('user-form-name').value = '';
+    document.getElementById('user-form-username').value = '';
+    document.getElementById('user-form-pass').value = '';
+    document.getElementById('user-form-role').value = 'Lector';
+    renderUserPhotoPreview(null, '?');
+    renderAccessCheckboxes(null);
+  }
+  document.getElementById('modal-user').style.display = 'flex';
+}
+
+function renderUserPhotoPreview(photo, name) {
+  const preview = document.getElementById('user-photo-preview');
+  if (photo) {
+    preview.innerHTML = `<img src="${photo}" alt="">`;
+  } else {
+    preview.textContent = (name || '?').charAt(0).toUpperCase();
+    preview.innerHTML = `<span style="font-size:24px;font-weight:900;">${(name || '?').charAt(0).toUpperCase()}</span>`;
+  }
+}
+
+function handleUserPhotoUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    resizeImage(e.target.result, 200, function(resized) {
+      pendingUserPhoto = resized;
+      const preview = document.getElementById('user-photo-preview');
+      preview.innerHTML = `<img src="${resized}" alt="">`;
+    });
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function removeUserPhoto() {
+  pendingUserPhoto = null;
+  const name = document.getElementById('user-form-name').value || '?';
+  renderUserPhotoPreview(null, name);
+}
+
+function resizeImage(dataUrl, maxSize, callback) {
+  const img = new Image();
+  img.onload = function() {
+    let w = img.width, h = img.height;
+    if (w > maxSize || h > maxSize) {
+      if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+      else { w = Math.round(w * maxSize / h); h = maxSize; }
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    callback(canvas.toDataURL('image/jpeg', 0.75));
+  };
+  img.src = dataUrl;
+}
+
+function renderAccessCheckboxes(userId) {
+  const role = document.getElementById('user-form-role').value;
+  const group = document.getElementById('access-group');
+  const container = document.getElementById('access-checkboxes');
+
+  if (role === 'Administrador') { group.style.display = 'none'; return; }
+  group.style.display = '';
+
+  const u = userId ? state.users.find(x => x.id === userId) : null;
+  const currentAccess = u ? (u.canAccessUsers || []) : [];
+
+  container.innerHTML = '';
+  state.users.forEach(target => {
+    const lbl = document.createElement('label');
+    lbl.className = 'checkbox-label';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = target.id;
+    cb.checked = currentAccess.includes(target.id);
+    lbl.appendChild(cb);
+    lbl.appendChild(document.createTextNode(target.name + ' (' + target.role + ')'));
+    container.appendChild(lbl);
+  });
+}
+
+function closeUserModal(event) {
+  if (event && event.target !== document.getElementById('modal-user')) return;
+  document.getElementById('modal-user').style.display = 'none';
+}
+
+function saveUser() {
+  const name     = document.getElementById('user-form-name').value.trim();
+  const username = document.getElementById('user-form-username').value.trim();
+  const password = document.getElementById('user-form-pass').value;
+  const role     = document.getElementById('user-form-role').value;
+  const editId   = document.getElementById('user-edit-id').value;
+
+  if (!name)     { showToast('El nombre es obligatorio', 'error'); return; }
+  if (!username) { showToast('El nombre de usuario es obligatorio', 'error'); return; }
+  if (!password) { showToast('La contraseña es obligatoria', 'error'); return; }
+
+  const dup = state.users.find(u => u.username === username && u.id !== editId);
+  if (dup) { showToast('Ese nombre de usuario ya existe', 'error'); return; }
+
+  const checkboxes = document.querySelectorAll('#access-checkboxes input[type=checkbox]');
+  const canAccessUsers = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
+
+  if (editId) {
+    const u = state.users.find(x => x.id === editId);
+    if (u) {
+      u.name = name; u.username = username; u.password = password;
+      u.role = role; u.canAccessUsers = canAccessUsers;
+      if (pendingUserPhoto !== undefined) u.photo = pendingUserPhoto;
+    }
+    if (currentUser.id === editId) {
+      currentUser = state.users.find(x => x.id === editId);
+      initApp();
+    }
+  } else {
+    const photo = pendingUserPhoto !== undefined ? pendingUserPhoto : null;
+    state.users.push({ id: uid(), name, username, password, role, canAccessUsers, photo });
+  }
+
+  saveState();
+  document.getElementById('modal-user').style.display = 'none';
+  renderUsers();
+  showToast(editId ? 'Usuario actualizado' : 'Usuario creado', 'success');
+}
+
+// ══════════════════════════════════════════
+//  UTILIDADES DE ÁRBOL
+// ══════════════════════════════════════════
+function findSubtask(nodes, stId) {
+  for (const node of nodes) {
+    if (node.subtasks) {
+      for (const st of node.subtasks) {
+        if (st.id === stId) return st;
+        const found = findSubtask([st], stId);
+        if (found) return found;
+      }
+    }
+  }
+  return null;
+}
+
+function removeSubtask(nodes, stId) {
+  for (const node of nodes) {
+    if (node.subtasks) {
+      const idx = node.subtasks.findIndex(s => s.id === stId);
+      if (idx !== -1) { node.subtasks.splice(idx, 1); return true; }
+      if (removeSubtask(node.subtasks, stId)) return true;
+    }
+  }
+  return false;
+}
+
+// ══════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════
+let toastTimer = null;
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show' + (type ? ' ' + type : '');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = ''; }, 2800);
+}
+
+// ══════════════════════════════════════════
+//  ESCAPE HTML
+// ══════════════════════════════════════════
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ══════════════════════════════════════════
+//  LOGIN: TOGGLE CLAVE
+// ══════════════════════════════════════════
+function toggleLoginPass() {
+  const inp = document.getElementById('login-pass');
+  const btn = document.querySelector('.pass-toggle-btn');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    inp.type = 'password';
+    btn.innerHTML = '&#128065;';
+  }
+}
+
+// ══════════════════════════════════════════
+//  ADJUNTOS
+// ══════════════════════════════════════════
+let mediaRecorder = null;
+let audioChunks = [];
+let recordingNodeId = null;
+
+function getNodeById(nodeId) {
+  const obj = state.objectives.find(o => o.id === nodeId);
+  if (obj) return obj;
+  return findSubtask(state.objectives, nodeId);
+}
+
+function ensureAttachments(node) {
+  if (!node.attachments) node.attachments = [];
+}
+
+function renderAttachmentSection(node, canEdit, isSt) {
+  const isLeaf = !node.subtasks || node.subtasks.length === 0;
+  const atts = node.attachments || [];
+  if (!isLeaf && atts.length === 0) return '';
+
+  const cls = isSt ? 'attach-section att-st' : 'attach-section';
+  let html = `<div class="${cls}">`;
+  html += `<div class="attach-title">&#128206; Adjuntos</div>`;
+
+  if (canEdit && isLeaf) {
+    html += `<div class="attach-btns">
+      <label class="attach-btn" title="Adjuntar archivo">
+        &#128196; Archivo
+        <input type="file" style="display:none" onchange="handleFileAttach('${node.id}',this,'file')">
+      </label>
+      <label class="attach-btn" title="Adjuntar imagen">
+        &#128444; Imagen
+        <input type="file" accept="image/*" style="display:none" onchange="handleFileAttach('${node.id}',this,'image')">
+      </label>
+      <label class="attach-btn" title="Tomar foto con cámara">
+        &#128247; Foto
+        <input type="file" accept="image/*" capture="environment" style="display:none" onchange="handleFileAttach('${node.id}',this,'image')">
+      </label>
+      <button class="attach-btn" id="audio-btn-${node.id}" onclick="toggleRecording('${node.id}')">&#127908; Audio</button>
+      <button class="attach-btn" onclick="promptLink('${node.id}')">&#128279; Link</button>
+    </div>`;
+  }
+
+  if (atts.length > 0) {
+    html += `<div class="attach-list">${atts.map(a => renderAttachmentItem(a, node.id, canEdit && isLeaf)).join('')}</div>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+function renderAttachmentItem(att, nodeId, canDel) {
+  const del = canDel
+    ? `<button class="attach-del" onclick="removeAttachment('${nodeId}','${att.id}')" title="Eliminar">&#10005;</button>`
+    : '';
+
+  if (att.type === 'link') {
+    return `<div class="attach-item">
+      <span class="attach-icon">&#128279;</span>
+      <a href="${escHtml(att.url)}" target="_blank" rel="noopener" class="attach-link">${escHtml(att.name || att.url)}</a>
+      ${del}
+    </div>`;
+  }
+  if (att.type === 'image') {
+    return `<div class="attach-item att-block">
+      <div class="attach-item-row">
+        <span class="attach-icon">&#128444;</span>
+        <span class="attach-name">${escHtml(att.name)}</span>
+        ${del}
+      </div>
+      <img src="${att.data}" alt="${escHtml(att.name)}" class="attach-preview">
+    </div>`;
+  }
+  if (att.type === 'audio') {
+    return `<div class="attach-item att-block">
+      <div class="attach-item-row">
+        <span class="attach-icon">&#127908;</span>
+        <span class="attach-name">${escHtml(att.name)}</span>
+        ${del}
+      </div>
+      <audio controls src="${att.data}" class="attach-audio"></audio>
+    </div>`;
+  }
+  return `<div class="attach-item">
+    <span class="attach-icon">&#128196;</span>
+    <span class="attach-name">${escHtml(att.name)}</span>
+    <a href="${att.data}" download="${escHtml(att.name)}" class="btn btn-ghost btn-sm" style="font-size:10px;flex-shrink:0;">&#11015; Bajar</a>
+    ${del}
+  </div>`;
+}
+
+function handleFileAttach(nodeId, input, type) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const node = getNodeById(nodeId);
+    if (!node) return;
+    ensureAttachments(node);
+    const resolvedType = file.type.startsWith('image/') ? 'image'
+      : file.type.startsWith('audio/') ? 'audio' : type;
+    node.attachments.push({ id: uid(), type: resolvedType, name: file.name, data: e.target.result, mimeType: file.type, createdAt: Date.now() });
+    saveState();
+    renderObjectives();
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function promptLink(nodeId) {
+  const url = prompt('URL del enlace:');
+  if (!url || !url.trim()) return;
+  const name = prompt('Nombre (opcional):') || url;
+  const node = getNodeById(nodeId);
+  if (!node) return;
+  ensureAttachments(node);
+  node.attachments.push({ id: uid(), type: 'link', name: name.trim(), url: url.trim(), createdAt: Date.now() });
+  saveState();
+  renderObjectives();
+}
+
+function removeAttachment(nodeId, attId) {
+  const node = getNodeById(nodeId);
+  if (!node || !node.attachments) return;
+  node.attachments = node.attachments.filter(a => a.id !== attId);
+  saveState();
+  renderObjectives();
+}
+
+function toggleRecording(nodeId) {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    stopRecording();
+  } else {
+    startRecording(nodeId);
+  }
+}
+
+function startRecording(nodeId) {
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    recordingNodeId = nodeId;
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(audioChunks, { type: 'audio/webm' });
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const node = getNodeById(recordingNodeId);
+        if (!node) return;
+        ensureAttachments(node);
+        node.attachments.push({ id: uid(), type: 'audio', name: 'Audio ' + new Date().toLocaleTimeString(), data: e.target.result, mimeType: 'audio/webm', createdAt: Date.now() });
+        saveState();
+        stream.getTracks().forEach(t => t.stop());
+        renderObjectives();
+        showToast('Audio guardado', 'success');
+      };
+      reader.readAsDataURL(blob);
+    };
+    mediaRecorder.start();
+    const btn = document.getElementById('audio-btn-' + nodeId);
+    if (btn) { btn.textContent = '⏹ Detener'; btn.classList.add('recording'); }
+  }).catch(() => {
+    showToast('No se pudo acceder al micrófono', 'error');
+  });
+}
+
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    mediaRecorder = null;
+  }
+}
+
+// ══════════════════════════════════════════
+//  ARRANQUE
+// ══════════════════════════════════════════
+async function initializeApp() {
+  await loadState();
+  document.getElementById('screen-loading').style.display = 'none';
+}
+initializeApp();
+</script>
+</body>
+</html>
