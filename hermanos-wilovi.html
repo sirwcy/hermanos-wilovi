@@ -275,22 +275,40 @@ main{flex:1;overflow-y:auto;padding:24px;}
 /* ══ RESPONSIVE ══ */
 @media(max-width:700px){
   .sidebar{display:none;}
-  main{padding:16px;}
+  main{padding:14px;}
   .dash-grid,.projects-grid{grid-template-columns:1fr;}
 
-  /* Modales en móvil: overlay scrolleable y centrado correcto */
+  /* Altura correcta en browsers móviles (excluye barra dirección) */
+  #app{height:100svh;}
+
+  /* Header compacto: solo emojis en nav, ocultar nombre de usuario */
+  header{padding:0 10px;gap:6px;}
+  .hdr-logo{font-size:15px;}
+  .hdr-btn-lbl{display:none;}
+  .hdr-btn{padding:7px 9px;font-size:16px;}
+  .hdr-btn.active{outline:2px solid rgba(255,255,255,.5);}
+  .hdr-divider{display:none;}
+  .user-name,.role-badge-hdr{display:none;}
+  .user-pill{padding:5px 8px 5px 6px;gap:4px;}
+
+  /* Modales: overlay scrolleable y centrado correcto */
   .overlay{align-items:flex-start;padding:12px;overflow-y:auto;}
   .modal{margin:auto;max-height:none;width:100%;}
 
-  /* Welcome modal más compacto en móvil */
+  /* Welcome modal compacto */
   .welcome-modal{padding-bottom:4px;}
   .welcome-avatar-wrap{width:70px;height:70px;font-size:28px;}
   .welcome-name{font-size:18px;}
-  .welcome-role{margin-bottom:14px;}
-  .welcome-stats{gap:6px;margin-bottom:14px;}
+  .welcome-role{margin-bottom:12px;}
+  .welcome-stats{gap:6px;margin-bottom:12px;}
   .welcome-stat{padding:10px 6px;}
   .welcome-stat-val{font-size:22px;}
   .welcome-stat-lbl{font-size:10px;}
+
+  /* Cards y tablas */
+  .page-header{flex-direction:column;align-items:flex-start;}
+  .obj-toolbar{flex-wrap:wrap;}
+  .users-table th:nth-child(6),.users-table td:nth-child(6){display:none;}
 }
 </style>
 </head>
@@ -325,11 +343,11 @@ main{flex:1;overflow-y:auto;padding:24px;}
   <header>
     <div class="hdr-logo">Hermanos <span>Wilovi</span></div>
     <div class="hdr-spacer"></div>
-    <button class="hdr-btn" id="nav-dashboard" onclick="showView('dashboard')">&#127968; Inicio</button>
-    <button class="hdr-btn" id="nav-projects" onclick="showView('projects')">&#128193; Proyectos</button>
-    <button class="hdr-btn" id="nav-objectives" onclick="showView('objectives')">&#127919; Objetivos</button>
-    <button class="hdr-btn" id="nav-admin" onclick="showView('admin')" style="display:none">&#9881; Usuarios</button>
-    <div style="width:1px;height:30px;background:rgba(255,255,255,.2);margin:0 4px;"></div>
+    <button class="hdr-btn" id="nav-dashboard" onclick="showView('dashboard')">&#127968;<span class="hdr-btn-lbl"> Inicio</span></button>
+    <button class="hdr-btn" id="nav-projects" onclick="showView('projects')">&#128193;<span class="hdr-btn-lbl"> Proyectos</span></button>
+    <button class="hdr-btn" id="nav-objectives" onclick="showView('objectives')">&#127919;<span class="hdr-btn-lbl"> Objetivos</span></button>
+    <button class="hdr-btn" id="nav-admin" onclick="showView('admin')" style="display:none">&#9881;<span class="hdr-btn-lbl"> Usuarios</span></button>
+    <div class="hdr-divider" style="width:1px;height:30px;background:rgba(255,255,255,.2);margin:0 4px;"></div>
     <button class="user-pill" onclick="doLogout()">
       <div class="user-avatar" id="hdr-avatar"></div>
       <div>
