@@ -68,21 +68,46 @@ header{background:linear-gradient(135deg,var(--primary) 0%,#0d2035 100%);color:#
 #app{display:none;flex-direction:column;height:100vh;}
 #app.visible{display:flex;}
 .app-body{flex:1;overflow:hidden;display:flex;}
-.sidebar{width:220px;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+.sidebar{width:260px;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
 main{flex:1;overflow-y:auto;padding:24px;}
 
-/* ══ SIDEBAR ══ */
-.sidebar-section{padding:8px 8px 4px;}
-.sidebar-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:6px 8px 4px;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:all .15s;border:none;background:transparent;width:100%;text-align:left;}
-.nav-item:hover{background:var(--bg);color:var(--text);}
-.nav-item.active{background:linear-gradient(135deg,#e8f0fa,#d4e3f5);color:var(--primary);}
-.nav-icon{font-size:16px;width:20px;text-align:center;}
-.sidebar-user-card{margin:8px;border-radius:var(--radius-sm);background:var(--bg);padding:10px 12px;border:1px solid var(--border);display:flex;align-items:center;gap:10px;}
-.suc-avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:14px;}
+/* ══ ÁRBOL LATERAL ══ */
+.tree-topbar{display:flex;align-items:center;gap:6px;padding:10px 10px 8px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.suc-avatar{width:30px;height:30px;border-radius:50%;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:12px;}
 .suc-avatar img{width:100%;height:100%;object-fit:cover;}
-.suc-info .suc-name{font-size:13px;font-weight:700;color:var(--text);}
-.suc-info .suc-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.suc-name-tree{flex:1;font-size:13px;font-weight:700;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tree-icon-btn{background:none;border:none;cursor:pointer;padding:4px 6px;border-radius:5px;font-size:15px;color:var(--muted);line-height:1;transition:all .12s;}
+.tree-icon-btn:hover{background:var(--bg);color:var(--text);}
+.tree-section-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px 4px;flex-shrink:0;}
+.tree-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
+.tree-add-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);line-height:1;padding:1px 6px;border-radius:5px;font-family:inherit;transition:all .12s;}
+.tree-add-btn:hover{background:var(--accent);color:#fff;}
+.proj-tree{flex:1;overflow-y:auto;padding:2px 4px 8px;}
+.tree-empty{padding:24px 12px;text-align:center;color:var(--muted);font-size:12px;line-height:1.6;}
+.tree-proj-row{display:flex;align-items:center;gap:3px;padding:5px 6px;border-radius:var(--radius-sm);cursor:pointer;transition:background .12s;user-select:none;position:relative;}
+.tree-proj-row:hover{background:var(--bg);}
+.tree-proj-row.t-active{background:linear-gradient(135deg,#e8f0fa,#d4e3f5);}
+.tree-chevron{font-size:9px;color:var(--muted);width:12px;text-align:center;flex-shrink:0;transition:transform .15s;line-height:1;display:inline-block;}
+.tree-chevron.t-open{transform:rotate(90deg);}
+.tree-proj-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.tree-proj-name{flex:1;font-size:13px;font-weight:700;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tree-row-actions{display:flex;gap:1px;opacity:0;transition:opacity .12s;flex-shrink:0;}
+.tree-proj-row:hover .tree-row-actions,.tree-block-row:hover .tree-row-actions{opacity:1;}
+.tree-act-btn{background:none;border:none;cursor:pointer;font-size:11px;padding:2px 4px;border-radius:4px;color:var(--muted);line-height:1;transition:all .12s;font-family:inherit;}
+.tree-act-btn:hover{background:var(--border);color:var(--text);}
+.tree-block-list{padding-left:12px;}
+.tree-block-row{display:flex;align-items:center;gap:3px;padding:4px 6px;border-radius:var(--radius-sm);cursor:pointer;transition:background .12s;user-select:none;}
+.tree-block-row:hover{background:var(--bg);}
+.tree-block-row.t-active{background:var(--blue-bg);}
+.tree-block-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0;}
+.tree-block-name{flex:1;font-size:12px;font-weight:600;color:var(--text2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tree-block-pct{font-size:10px;color:var(--muted);flex-shrink:0;margin-left:2px;}
+.tree-obj-list{padding-left:14px;}
+.tree-obj-row{display:flex;align-items:center;gap:4px;padding:3px 6px;border-radius:var(--radius-sm);cursor:pointer;transition:background .12s;user-select:none;}
+.tree-obj-row:hover{background:var(--bg);}
+.tree-obj-dot{font-size:8px;color:var(--muted);flex-shrink:0;line-height:1;}
+.tree-obj-name{flex:1;font-size:11px;color:var(--text2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tree-obj-pct{font-size:10px;color:var(--muted);flex-shrink:0;}
 
 /* ══ BOTONES ══ */
 .btn{display:inline-flex;align-items:center;gap:5px;border:none;cursor:pointer;border-radius:var(--radius-sm);font-weight:600;font-size:13px;transition:all .15s;font-family:inherit;}
@@ -296,6 +321,7 @@ main{flex:1;overflow-y:auto;padding:24px;}
   .sidebar{display:none;}
   main{padding:14px;}
   .dash-grid,.projects-grid,.blocks-grid{grid-template-columns:1fr;}
+  .tree-topbar,.tree-section-header,.proj-tree{display:none;}
   #app{height:100svh;}
   header{padding:0 10px;gap:6px;}
   .hdr-logo{font-size:15px;}
@@ -390,31 +416,17 @@ main{flex:1;overflow-y:auto;padding:24px;}
 
   <div class="app-body">
     <div class="sidebar">
-      <div style="height:12px;"></div>
-      <div class="sidebar-section">
-        <div class="sidebar-section-title">Navegación</div>
-        <button class="nav-item" id="snav-dashboard" onclick="showView('dashboard')">
-          <span class="nav-icon">&#127968;</span> Inicio
-        </button>
-        <button class="nav-item" id="snav-projects" onclick="showView('projects')">
-          <span class="nav-icon">&#128193;</span> Proyectos
-        </button>
-        <button class="nav-item" id="snav-account" onclick="showView('account')">
-          <span class="nav-icon">&#128100;</span> Mi Cuenta
-        </button>
+      <div class="tree-topbar">
+        <div class="suc-avatar" id="suc-avatar"></div>
+        <span class="suc-name-tree" id="suc-name">—</span>
+        <button class="tree-icon-btn" onclick="showView('account')" title="Mi Cuenta">&#128100;</button>
+        <button class="tree-icon-btn" onclick="doLogout()" style="color:var(--red)" title="Cerrar sesión">&#128682;</button>
       </div>
-      <div style="margin-top:auto;padding:8px;padding-bottom:12px;">
-        <div class="sidebar-user-card">
-          <div class="suc-avatar" id="suc-avatar"></div>
-          <div class="suc-info">
-            <div class="suc-name" id="suc-name">—</div>
-            <div class="suc-sub" id="suc-sub">—</div>
-          </div>
-        </div>
-        <button class="nav-item" onclick="doLogout()" style="color:var(--red);margin-top:4px;">
-          <span class="nav-icon">&#128682;</span> Cerrar sesión
-        </button>
+      <div class="tree-section-header">
+        <span class="tree-section-title">Proyectos</span>
+        <button class="tree-add-btn" onclick="openProjectModal()" title="Nuevo proyecto">&#43;</button>
       </div>
+      <div id="proj-tree" class="proj-tree"></div>
     </div>
 
     <main>
@@ -764,6 +776,7 @@ let currentUser = null;
 let currentView = 'dashboard';
 let currentProjectId = null;
 let currentBlockId = null;
+let treeState = {};
 
 const PROJECT_COLORS = ['#1a3a5c','#2d7a4a','#c45a00','#6b3fa0','#b03030','#1a7090','#8b6914','#555555'];
 
@@ -886,6 +899,7 @@ async function loadState() {
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   syncToSupabase().catch(e => console.warn('Sync Supabase falló:', e));
+  renderTree();
 }
 
 // ══════════════════════════════════════════
@@ -1033,8 +1047,7 @@ function initApp() {
   av(u.photo, u.name, document.getElementById('suc-avatar'));
   document.getElementById('hdr-name').textContent = u.name;
   document.getElementById('suc-name').textContent = u.name;
-  const projCount = getVisibleProjects().length;
-  document.getElementById('suc-sub').textContent = projCount + ' proyecto' + (projCount !== 1 ? 's' : '');
+  renderTree();
   showView('dashboard');
 }
 
@@ -1051,14 +1064,6 @@ function showView(view, params = {}) {
     if (el) el.style.display = v === view ? '' : 'none';
   });
 
-  // Sidebar activo
-  ['dashboard','projects','account'].forEach(v => {
-    const btn = document.getElementById('snav-' + v);
-    if (btn) btn.classList.toggle('active',
-      v === view || (v === 'projects' && (view === 'project-detail' || view === 'block-detail'))
-    );
-  });
-
   updateBreadcrumb(view);
   currentView = view;
 
@@ -1067,6 +1072,7 @@ function showView(view, params = {}) {
   if (view === 'project-detail') renderProjectDetail();
   if (view === 'block-detail')   renderBlockDetail();
   if (view === 'account')        renderAccount();
+  renderTree();
 }
 
 function updateBreadcrumb(view) {
@@ -1102,6 +1108,110 @@ function updateBreadcrumb(view) {
     }
   }
 }
+// ══════════════════════════════════════════
+//  ÁRBOL LATERAL
+// ══════════════════════════════════════════
+function renderTree() {
+  const tree = document.getElementById('proj-tree');
+  if (!tree || !currentUser) return;
+  const projects = getVisibleProjects();
+  if (projects.length === 0) {
+    tree.innerHTML = '<div class="tree-empty">Sin proyectos aún.<br>Usa el botón <strong>+</strong> para crear uno.</div>';
+    return;
+  }
+  tree.innerHTML = '';
+  projects.forEach(proj => {
+    const isOwner = isProjectOwner(proj.id);
+    const ts = treeState[proj.id] || {};
+    const isOpenProj = !!ts.open;
+    const blocks = getVisibleBlocks(proj.id);
+    const hasBlocks = blocks.length > 0;
+    const isProjActive = currentView === 'project-detail' && currentProjectId === proj.id;
+
+    const projRow = document.createElement('div');
+    projRow.className = 'tree-proj-row' + (isProjActive ? ' t-active' : '');
+    projRow.innerHTML =
+      `<span class="tree-chevron${isOpenProj ? ' t-open' : ''}">${hasBlocks ? '&#9658;' : ''}</span>` +
+      `<span class="tree-proj-dot" style="background:${proj.color||'var(--primary)'}"></span>` +
+      `<span class="tree-proj-name" title="${escHtml(proj.title)}">${escHtml(proj.title)}</span>` +
+      `<span class="tree-row-actions">` +
+        (isOwner ? `<button class="tree-act-btn" title="Nuevo bloque" onclick="event.stopPropagation();treeAddBlock('${proj.id}')">&#43;</button>` : '') +
+        (isOwner ? `<button class="tree-act-btn" title="Editar proyecto" onclick="event.stopPropagation();openProjectModal('${proj.id}')">&#9998;</button>` : '') +
+      `</span>`;
+    projRow.onclick = (e) => {
+      if (e.target.closest('.tree-act-btn')) return;
+      if (!treeState[proj.id]) treeState[proj.id] = {};
+      if (hasBlocks) treeState[proj.id].open = !isOpenProj;
+      showView('project-detail', { projectId: proj.id });
+    };
+    tree.appendChild(projRow);
+
+    if (isOpenProj && hasBlocks) {
+      const blockList = document.createElement('div');
+      blockList.className = 'tree-block-list';
+      blocks.forEach(block => {
+        const bts = (treeState[proj.id] && treeState[proj.id].blocks && treeState[proj.id].blocks[block.id]) || {};
+        const isOpenBlock = !!bts.open;
+        const objs = state.objectives.filter(o => o.blockId === block.id);
+        const hasObjs = objs.length > 0;
+        const blockPct = calcBlockProgress(block.id);
+        const isBlockActive = currentView === 'block-detail' && currentBlockId === block.id;
+        const canEdit = canEditBlock(block.id);
+
+        const blockRow = document.createElement('div');
+        blockRow.className = 'tree-block-row' + (isBlockActive ? ' t-active' : '');
+        blockRow.innerHTML =
+          `<span class="tree-chevron${isOpenBlock ? ' t-open' : ''}">${hasObjs ? '&#9658;' : ''}</span>` +
+          `<span class="tree-block-dot" style="background:${block.color||proj.color||'var(--primary)'}"></span>` +
+          `<span class="tree-block-name" title="${escHtml(block.title)}">${escHtml(block.title)}</span>` +
+          `<span class="tree-block-pct">${blockPct}%</span>` +
+          `<span class="tree-row-actions">` +
+            (canEdit ? `<button class="tree-act-btn" title="Nuevo objetivo" onclick="event.stopPropagation();treeAddObj('${proj.id}','${block.id}')">&#43;</button>` : '') +
+          `</span>`;
+        blockRow.onclick = (e) => {
+          if (e.target.closest('.tree-act-btn')) return;
+          if (!treeState[proj.id]) treeState[proj.id] = {};
+          if (!treeState[proj.id].blocks) treeState[proj.id].blocks = {};
+          if (!treeState[proj.id].blocks[block.id]) treeState[proj.id].blocks[block.id] = {};
+          if (hasObjs) treeState[proj.id].blocks[block.id].open = !isOpenBlock;
+          showView('block-detail', { projectId: proj.id, blockId: block.id });
+        };
+        blockList.appendChild(blockRow);
+
+        if (isOpenBlock && hasObjs) {
+          const objList = document.createElement('div');
+          objList.className = 'tree-obj-list';
+          objs.forEach(obj => {
+            const pct = calcProgress(obj);
+            const objRow = document.createElement('div');
+            objRow.className = 'tree-obj-row';
+            objRow.innerHTML =
+              `<span class="tree-obj-dot">&#9702;</span>` +
+              `<span class="tree-obj-name" title="${escHtml(obj.title)}">${escHtml(obj.title)}</span>` +
+              `<span class="tree-obj-pct">${pct}%</span>`;
+            objRow.onclick = () => showView('block-detail', { projectId: proj.id, blockId: block.id });
+            objList.appendChild(objRow);
+          });
+          blockList.appendChild(objList);
+        }
+      });
+      tree.appendChild(blockList);
+    }
+  });
+}
+
+function treeAddBlock(projId) {
+  if (!treeState[projId]) treeState[projId] = {};
+  treeState[projId].open = true;
+  showView('project-detail', { projectId: projId });
+  openBlockModal();
+}
+
+function treeAddObj(projId, blockId) {
+  showView('block-detail', { projectId: projId, blockId: blockId });
+  openObjModal();
+}
+
 // ══════════════════════════════════════════
 //  MODAL BIENVENIDA
 // ══════════════════════════════════════════
@@ -1507,16 +1617,17 @@ function saveProject() {
   const color = document.getElementById('proj-form-color').value || '#1a3a5c';
   const editId = document.getElementById('proj-edit-id').value;
 
+  let savedId = editId;
   if (editId) {
     const proj = state.projects.find(p => p.id === editId);
     if (proj) { proj.title = title; proj.description = desc; proj.color = color; }
   } else {
-    state.projects.push({ id: uid(), title, description: desc, color, ownerId: currentUser.id, members: [], createdAt: Date.now() });
+    savedId = uid();
+    state.projects.push({ id: savedId, title, description: desc, color, ownerId: currentUser.id, members: [], createdAt: Date.now() });
   }
   saveState();
   closeProjectModal();
-  if (currentView === 'projects') renderProjects();
-  else if (currentView === 'project-detail') renderProjectDetail();
+  showView('project-detail', { projectId: savedId });
   showToast(editId ? 'Proyecto actualizado' : 'Proyecto creado', 'success');
 }
 
@@ -1580,6 +1691,8 @@ function saveBlock() {
     if (block) { block.title = title; block.description = desc; block.color = color; }
   } else {
     state.blocks.push({ id: uid(), projectId: currentProjectId, title, description: desc, color });
+    if (!treeState[currentProjectId]) treeState[currentProjectId] = {};
+    treeState[currentProjectId].open = true;
   }
   saveState();
   closeBlockModal();
