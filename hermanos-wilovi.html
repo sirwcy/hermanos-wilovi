@@ -1218,6 +1218,7 @@ function treeAddObj(projId, blockId) {
 function showWelcomeModal() {
   const u = currentUser;
   const myProjects = getVisibleProjects();
+  if (myProjects.length === 0) return;
   const myBlockIds = state.blocks.filter(b => myProjects.some(p => p.id === b.projectId) && canSeeBlock(b.id)).map(b => b.id);
   const myObjs = state.objectives.filter(o => myBlockIds.includes(o.blockId));
   const avgProgress = myObjs.length
