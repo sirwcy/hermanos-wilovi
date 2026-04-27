@@ -182,7 +182,9 @@ main{flex:1;overflow-y:auto;padding:24px;}
 
 /* ══ OBJETIVOS - ÁRBOL ══ */
 .obj-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
-.obj-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:12px;overflow:hidden;}
+.obj-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:12px;overflow:hidden;transition:opacity .15s,transform .15s;}
+.obj-card.dragging{opacity:.4;transform:scale(.98);}
+.obj-card.drag-over{border:2px dashed var(--accent);background:var(--blue-bg);}
 .obj-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none;transition:background .15s;}
 .obj-head:hover{background:var(--bg);}
 .chevron{font-size:11px;transition:transform .2s;color:var(--muted);flex-shrink:0;}
@@ -195,7 +197,7 @@ main{flex:1;overflow-y:auto;padding:24px;}
 .obj-progress-row{padding:6px 16px 10px;display:flex;align-items:center;gap:10px;}
 .obj-bar{flex:1;height:10px;background:var(--border);border-radius:99px;overflow:hidden;}
 .obj-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--green),#4aaa6a);transition:width .4s;}
-.obj-slider{flex:1;-webkit-appearance:none;height:10px;border-radius:99px;outline:none;cursor:pointer;}
+.obj-slider{flex:1;-webkit-appearance:none;height:10px;border-radius:99px;outline:none;cursor:pointer;touch-action:none;}
 .obj-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--green);border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.3);cursor:pointer;}
 .obj-desc{padding:0 16px 12px;font-size:13px;color:var(--text2);line-height:1.5;}
 
@@ -209,7 +211,7 @@ main{flex:1;overflow-y:auto;padding:24px;}
 .st-actions{display:flex;gap:3px;flex-shrink:0;}
 .st-body{border-top:1px solid var(--border);padding:10px 13px;}
 .st-progress-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.st-slider{flex:1;-webkit-appearance:none;height:9px;border-radius:99px;outline:none;cursor:pointer;}
+.st-slider{flex:1;-webkit-appearance:none;height:9px;border-radius:99px;outline:none;cursor:pointer;touch-action:none;}
 .st-slider::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--green);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);}
 .st-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:8px;}
 .nested-subtasks{padding-left:20px;margin-top:8px;}
@@ -446,6 +448,7 @@ main{flex:1;overflow-y:auto;padding:24px;}
       <div id="view-projects" style="display:none">
         <div class="page-header">
           <div>
+            <button class="btn btn-ghost btn-sm" onclick="showView('dashboard')" style="margin-bottom:6px;font-size:12px;">&#8592; Inicio</button>
             <h2>&#128193; Proyectos</h2>
             <p>Tus proyectos propios y compartidos</p>
           </div>
@@ -458,6 +461,7 @@ main{flex:1;overflow-y:auto;padding:24px;}
       <div id="view-project-detail" style="display:none">
         <div class="page-header">
           <div>
+            <button class="btn btn-ghost btn-sm" onclick="showView('projects')" style="margin-bottom:6px;font-size:12px;">&#8592; Proyectos</button>
             <h2 id="proj-detail-title">Proyecto</h2>
             <p id="proj-detail-subtitle">Bloques del proyecto</p>
           </div>
@@ -474,6 +478,7 @@ main{flex:1;overflow-y:auto;padding:24px;}
       <div id="view-block-detail" style="display:none">
         <div class="page-header">
           <div>
+            <button class="btn btn-ghost btn-sm" id="btn-back-block" onclick="showView('project-detail',{projectId:currentProjectId})" style="margin-bottom:6px;font-size:12px;">&#8592; <span id="btn-back-block-label">Proyecto</span></button>
             <h2 id="block-detail-title">Bloque</h2>
             <p id="block-detail-subtitle">Objetivos y tareas</p>
           </div>
@@ -488,7 +493,10 @@ main{flex:1;overflow-y:auto;padding:24px;}
       <!-- MI CUENTA -->
       <div id="view-account" style="display:none">
         <div class="page-header">
-          <div><h2>&#128100; Mi Cuenta</h2><p>Perfil y configuración</p></div>
+          <div>
+            <button class="btn btn-ghost btn-sm" onclick="showView('dashboard')" style="margin-bottom:6px;font-size:12px;">&#8592; Inicio</button>
+            <h2>&#128100; Mi Cuenta</h2><p>Perfil y configuración</p>
+          </div>
         </div>
         <div class="account-section">
           <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
@@ -777,6 +785,7 @@ let currentView = 'dashboard';
 let currentProjectId = null;
 let currentBlockId = null;
 let treeState = {};
+let dragObjId = null;
 
 const PROJECT_COLORS = ['#1a3a5c','#2d7a4a','#c45a00','#6b3fa0','#b03030','#1a7090','#8b6914','#555555'];
 
@@ -969,7 +978,7 @@ function switchToLogin() {
 function doLogin() {
   const username = document.getElementById('login-user').value.trim();
   const password = document.getElementById('login-pass').value;
-  const user = state.users.find(u => u.username === username && u.password === password);
+  const user = state.users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
   if (!user) {
     document.getElementById('login-err').textContent = 'Usuario o contraseña incorrectos.';
     return;
@@ -1287,8 +1296,20 @@ function calcProgress(node) {
 
 function calcBlockProgress(blockId) {
   const objs = state.objectives.filter(o => o.blockId === blockId);
-  if (!objs.length) return 0;
+  if (!objs.length) {
+    const block = state.blocks.find(b => b.id === blockId);
+    return block ? (block.progress || 0) : 0;
+  }
   return Math.round(objs.reduce((s, o) => s + calcProgress(o), 0) / objs.length);
+}
+
+function updateBlockProgress(blockId, val) {
+  const block = state.blocks.find(b => b.id === blockId);
+  if (!block) return;
+  block.progress = parseInt(val);
+  const lbl = document.getElementById('blk-pct-' + blockId);
+  if (lbl) lbl.textContent = val + '%';
+  saveState();
 }
 
 function calcProjectProgress(projectId) {
@@ -1463,6 +1484,9 @@ function renderBlockDetail() {
 
   const canEdit = canEditBlock(block.id);
   document.getElementById('block-detail-title').textContent = block.title;
+  const proj = state.projects.find(p => p.id === block.projectId);
+  const backLbl = document.getElementById('btn-back-block-label');
+  if (backLbl && proj) backLbl.textContent = proj.title;
   document.getElementById('block-detail-subtitle').textContent =
     (block.description ? block.description + ' · ' : '') + calcBlockProgress(block.id) + '% completado';
 
@@ -1474,8 +1498,19 @@ function renderBlockDetail() {
 
   const objs = state.objectives.filter(o => o.blockId === currentBlockId);
   if (objs.length === 0) {
+    const blkPct = calcBlockProgress(currentBlockId);
     list.innerHTML = `<div class="empty"><div class="icon">&#127919;</div>
-      <p>${canEdit ? 'No hay objetivos aún. ¡Crea el primero!' : 'No hay objetivos en este bloque.'}</p></div>`;
+      <p>${canEdit ? 'No hay objetivos aún. ¡Crea el primero!' : 'No hay objetivos en este bloque.'}</p>
+      ${canEdit ? `<div style="margin-top:16px;max-width:360px;width:100%;">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;"><span>Progreso del bloque</span><span id="blk-pct-${currentBlockId}">${blkPct}%</span></div>
+        <input type="range" class="obj-slider" style="width:100%;touch-action:none;" min="0" max="100" value="${blkPct}"
+          oninput="updateBlockProgress('${currentBlockId}',this.value);applySliderFill(this);" id="blk-slider-${currentBlockId}">
+      </div>` : ''}
+    </div>`;
+    if (canEdit) {
+      const sl = document.getElementById('blk-slider-' + currentBlockId);
+      if (sl) applySliderFill(sl);
+    }
     return;
   }
 
@@ -1846,6 +1881,27 @@ function renderObjCard(obj, canEdit) {
   if (obj.subtasks && obj.subtasks.length > 0) {
     obj.subtasks.forEach(st => sts.appendChild(renderSubtask(st, obj.id, null, canEdit, 0)));
   }
+
+  if (canEdit) {
+    card.setAttribute('draggable', 'true');
+    card.addEventListener('dragstart', e => { dragObjId = obj.id; setTimeout(() => card.classList.add('dragging'), 0); });
+    card.addEventListener('dragend', () => { dragObjId = null; card.classList.remove('dragging'); document.querySelectorAll('.obj-card').forEach(c => c.classList.remove('drag-over')); });
+    card.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('drag-over'); });
+    card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+    card.addEventListener('drop', e => {
+      e.preventDefault();
+      card.classList.remove('drag-over');
+      if (!dragObjId || dragObjId === obj.id) return;
+      const si = state.objectives.findIndex(o => o.id === dragObjId);
+      const di = state.objectives.findIndex(o => o.id === obj.id);
+      if (si === -1 || di === -1) return;
+      const [moved] = state.objectives.splice(si, 1);
+      state.objectives.splice(di, 0, moved);
+      saveState();
+      renderBlockDetail();
+    });
+  }
+
   return card;
 }
 
