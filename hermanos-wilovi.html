@@ -1405,6 +1405,7 @@ function renderProjects() {
       <div class="proj-stats">
         <div class="proj-stat"><strong>${blocks.length}</strong><br>Bloques</div>
         <div class="proj-stat"><strong>${objCount}</strong><br>Objetivos</div>
+        ${isOwner && (proj.members||[]).length > 0 ? `<div class="proj-stat" style="color:var(--accent)"><strong>+${proj.members.length}</strong><br>Miembros</div>` : ''}
       </div>`;
     grid.appendChild(card);
   });
