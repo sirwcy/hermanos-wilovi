@@ -1422,7 +1422,10 @@ function renderProjectDetail() {
   document.getElementById('proj-detail-subtitle').textContent =
     (proj.description || '') + (proj.description ? ' · ' : '') + calcProjectProgress(proj.id) + '% completado';
 
-  document.getElementById('btn-share-proj').style.display = isOwner ? '' : 'none';
+  const memberCount = (proj.members || []).length;
+  const shareBtn = document.getElementById('btn-share-proj');
+  shareBtn.style.display = isOwner ? '' : 'none';
+  shareBtn.innerHTML = '&#128101; Compartir' + (memberCount > 0 ? ` <span style="background:var(--accent);color:#fff;border-radius:99px;font-size:11px;padding:1px 7px;margin-left:4px;font-weight:700;">+${memberCount}</span>` : '');
   document.getElementById('btn-edit-proj').style.display = isOwner ? '' : 'none';
   document.getElementById('btn-add-block').style.display = isOwner ? '' : 'none';
 
